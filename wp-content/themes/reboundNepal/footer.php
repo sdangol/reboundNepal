@@ -149,6 +149,9 @@
 		<div class="clear"></div>
 	</div>
 </div>
+<script>
+	var admin_ajax_url = "<?php echo admin_url('admin_ajax.php'); ?>":
+</script>
 <?php wp_footer(); ?>
 </body>
 </html>
