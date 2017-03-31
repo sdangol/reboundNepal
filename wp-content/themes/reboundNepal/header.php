@@ -71,8 +71,16 @@
                 <div class="grid_12 header-content">
                     <div id="sys_header_right" class="header-right">
                         <div class="account-panel">
+                          <?php if (!is_user_logged_in()): ?>
                             <a href="#" class="btn btn-red sys_show_popup_login">Register</a>
                             <a href="#" class="btn btn-black sys_show_popup_login">Login</a>
+                          <?php
+                            else:
+                              $logged_user = wp_get_current_user();
+                          ?>
+                            <span>Logged in as <a href="<?php echo get_author_posts_url($logged_user->ID); ?>"><?php echo $logged_user->display_name; ?></a></span>
+                            <span><a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a></span>
+                          <?php endif; ?>
                         </div>
                         <div class="form-search">
                             <form action="#">
@@ -293,4 +301,4 @@
         </div>
       </div>
     </div>
-        </header><!--end: #header -->
+  </header><!--end: #header -->

@@ -19,6 +19,7 @@ function reboundnepal_scripts() {
 	}
 	wp_enqueue_style( 'reboundnepal-style', get_stylesheet_uri() );
 	wp_enqueue_style( 'responsive-css', get_theme_file_uri( '/css/responsive.css' ) );
+	wp_enqueue_style( 'custom-css', get_theme_file_uri( '/css/custom.css' ) );
 
 	//Add js files
 	wp_enqueue_script( 'raphael-js', get_theme_file_uri( '/js/raphael-min.js' ), array(), '1.0', true );
@@ -231,3 +232,36 @@ function reboundnepal_comments($comment, $args, $depth) {
 function reboundnepal_comments_end(){
 	return;
 }
+
+/**
+ * Check if the user account has been verified
+ * @param  WP_User/WP_Error 	$user     	User Object/Error Object
+ * @param  string 						$password 	Plain text password
+ * @return WP_User/WP_Error           		User Object if approved, else Error Object
+ */
+function login_check_approved($user,$username,$password){
+	if (!isset($user) || is_wp_error($user)) return new WP_Error('invalid_cred','Invalid username/password');
+	else{
+		if (get_user_meta($user->ID,'approval_status',true) == 1) return $user;
+		else return new WP_Error('not_verified','Account has not been verified');
+	}
+}
+add_filter('authenticate','login_check_approved',20,3);
+
+/**
+ * Prevent users other than admin from the backend
+ */
+// function blockusers_init() {
+// 	if ( is_admin() && ! current_user_can( 'administrator' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+// 		wp_redirect( home_url() );
+// 		exit;
+// 	}
+// }
+// add_action( 'init', 'blockusers_init' );
+
+//Remove admin bar in frontend
+add_filter('show_admin_bar', '__return_false');
+
+
+//Include file for ajax form handling
+include_once __DIR__."/includes/ajax-functions.php";

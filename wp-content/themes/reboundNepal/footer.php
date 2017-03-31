@@ -80,30 +80,33 @@
 		</div>
 		<div class="grid_6 prefix_1">
 			<div class="form login-form">
-				<form action="#">
+				<form action="<?php echo admin_url('admin-ajax.php?action=register_user'); ?>" class="ajax-form">
 					<h3 class="rs title-form">Register</h3>
 					<div class="box-white">
 						<h4 class="rs title-box">New to Rebound?</h4>
 						<p class="rs">A Rebound account is required to continue.</p>
 						<div class="form-action">
+							<div class="alert-msg" style="display:none;">
+								<!-- Alert message is shown here -->
+							</div>
 							<label for="txt_name">
-								<input id="txt_name" class="txt fill-width" type="text" placeholder="Enter full name"/>
+								<input id="txt_name" class="txt fill-width" type="text" placeholder="Enter full name" name="full_name" />
 							</label>
 							<div class="wrap-2col clearfix">
 								<div class="col">
 									<label for="txt_email">
-										<input id="txt_email" class="txt fill-width" type="email" placeholder="Enter your e-mail address"/>
+										<input id="txt_email" class="txt fill-width" type="email" placeholder="Enter your e-mail address" name="email" />
 									</label>
 									<label for="txt_re_email">
-										<input id="txt_re_email" class="txt fill-width" type="email" placeholder="Re-enter your e-mail adress"/>
+										<input id="txt_re_email" class="txt fill-width" type="email" placeholder="Re-enter your e-mail adress" name="email_confirm" />
 									</label>
 								</div>
 								<div class="col">
 									<label for="txt_password">
-										<input id="txt_password" class="txt fill-width" type="password" placeholder="Enter password"/>
+										<input id="txt_password" class="txt fill-width" type="password" placeholder="Enter password" name="password" />
 									</label>
 									<label for="txt_re_password">
-										<input id="txt_re_password" class="txt fill-width" type="password" placeholder="Re-enter password"/>
+										<input id="txt_re_password" class="txt fill-width" type="password" placeholder="Re-enter password" name="password_confirm" />
 									</label>
 								</div>
 							</div>
@@ -118,21 +121,24 @@
 		</div>
 		<div class="grid_4">
 			<div class="form login-form">
-				<form action="#">
+				<form action="<?php echo admin_url('admin-ajax.php?action=login_user'); ?>" class="ajax-form"">
 					<h3 class="rs title-form">Login</h3>
 					<div class="box-white">
 						<h4 class="rs title-box">Already Have an Account?</h4>
 						<p class="rs">Please log in to continue.</p>
 						<div class="form-action">
+							<div class="alert-msg" style="display:none;">
+								<!-- Alert message is shown here -->
+							</div>
 							<label for="txt_email_login">
-								<input id="txt_email_login" class="txt fill-width" type="email" placeholder="Enter your e-mail address"/>
+								<input id="txt_email_login" class="txt fill-width" type="email" placeholder="Enter your e-mail address" name="email"/>
 							</label>
 							<label for="txt_password_login">
-								<input id="txt_password_login" class="txt fill-width" type="password" placeholder="Enter password"/>
+								<input id="txt_password_login" class="txt fill-width" type="password" placeholder="Enter password" name="password"/>
 							</label>
 
 							<label for="chk_remember" class="rs pb20 clearfix">
-								<input id="chk_remember" type="checkbox" class="chk-remember"/>
+								<input id="chk_remember" type="checkbox" class="chk-remember" name="remember"/>
 								<span class="lbl-remember">Remember me</span>
 							</label>
 							<p class="rs ta-c pb10">
@@ -150,7 +156,7 @@
 	</div>
 </div>
 <script>
-	var admin_ajax_url = "<?php echo admin_url('admin_ajax.php'); ?>":
+	var admin_ajax_url = "<?php echo admin_url('admin_ajax.php'); ?>";
 </script>
 <?php wp_footer(); ?>
 </body>

@@ -78,7 +78,7 @@
 							</a>
 							<div class="wrap-short-detail">
 								<h3 class="rs acticle-title"><a class="be-fc-orange" href="<?php echo get_permalink($staff_picked_project); ?>"><?php echo get_the_title($staff_picked_project); ?></a></h3>
-								<p class="rs tiny-desc">by <a href="<?php echo get_author_posts_url($staff_picked_project->post_author); ?>" class="fw-b fc-gray be-fc-orange"><?php the_author(); ?></a> in <span class="fw-b fc-gray"><?php the_field('location',$staff_picked_project->ID); ?></span></p>
+								<p class="rs tiny-desc">by <a href="<?php echo get_author_posts_url($staff_picked_project->post_author); ?>" class="fw-b fc-gray be-fc-orange"><?php the_author_meta('display_name',$staff_picked_project->post_author); ?></a> in <span class="fw-b fc-gray"><?php the_field('location',$staff_picked_project->ID); ?></span></p>
 								<p class="rs title-description"><?php echo wp_trim_words($staff_picked_project->post_content,25); ?></p>
 							</div>
 							<p class="rs clearfix comment-view">
