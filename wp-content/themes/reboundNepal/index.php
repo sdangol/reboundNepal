@@ -60,7 +60,7 @@
 				<?php } ?>
 						</ul>
 						<p class="rs view-all-category">
-							<a href="category.html" class="be-fc-orange">+ View all categories</a>
+							<a href="<?php echo site_url('/all-project-categories/'); ?>" class="be-fc-orange">+ View all categories</a>
 						</p>
 					</nav><!--end: .lst-category -->
 				</div>
@@ -68,7 +68,7 @@
 			<div class="grid_8 marked-category">
 				<div class="wrap-title clearfix">
 					<h2 class="title-mark rs">Staff Picks: <span class="fc-orange"><?php echo $picked_category->name; ?></span></h2>
-					<a href="category.html" class="count-project be-fc-orange">See all <span class="fw-b"><?php echo $picked_category->count; ?></span> <?php echo $picked_category->name; ?> projects</a>
+					<a href="<?php echo get_term_link($picked_category); ?>" class="count-project be-fc-orange">See all <span class="fw-b"><?php echo $picked_category->count; ?></span> <?php echo $picked_category->name; ?> projects</a>
 				</div>
 				<div class="box-marked-project project-short">
 					<div class="top-project-info">

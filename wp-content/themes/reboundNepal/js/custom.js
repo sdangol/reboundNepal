@@ -6,18 +6,23 @@
     // The DOM is ready!
     // Show dropdown on search
 		$('#sys_txt_keyword').focusin(function(event) {
-			$('.dropdown-search-result').show();
+			$('#search').show();
 		});
 		$('.iBigX').click(function() {
-			$('.dropdown-search-result').hide();
+			$(this).closest('.dropdown-search-result').hide();
+		});
+
+		//Show dropdown on discover
+		$('#discover-projects').on('click',function(){
+			$('#discover').show();
 		});
 
 		//Handle ajax form submit
 		$('.ajax-form').on('submit',function(e){
 			e.preventDefault();
+			//Get action attribute of form
 			var ajaxurl = $(this).attr('action');
 			var form = $(this);
-			form.find('button[type=submit]').prop('disabled',true);
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -26,11 +31,12 @@
 			})
 			.done(function(response) {
 				response = $.parseJSON(response);
-				if (response.type == 'login-success'){
+				if (response.type == 'success-redirect'){
+					//Reload the page if success
 					window.location.href = response.url;
 				}else{
+					//Show error 
 					$(this).find('.alert-msg').addClass(response.type).text(response.text).show();
-					$(this).find('button[type=submit]').prop('disabled',false);
 					if (response.type == 'alert-success') $(this).reset();
 				}
 			})
@@ -39,9 +45,20 @@
 			});
 		});
 
+		//Reset error message on re writing form
 		$('input[type=text],input[type=email],input[type=password]').keyup(function(){
       $('.alert-msg').hide();
     });
+
+    //View payment options on pledging a project
+    $('.btn-back-project').on('click',function(e){
+    	e.preventDefault();
+    	var form = $(this).closest('.form');
+ 			//Update amount respectively
+    	form.fadeOut('fast',function(){
+	    	form.siblings('.donate-options').fadeIn('fast');
+    	});
+    })
   });
  // The rest of the code goes here!
 }(window.jQuery, window, document));

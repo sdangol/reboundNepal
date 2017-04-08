@@ -87,9 +87,50 @@ function login_user(){
 			echo json_encode(['type' => 'alert-warning','text' => $login->get_error_message()]);
 			die;
 		}
-		echo json_encode(['type' => 'login-success','url' => site_url()]);
+		echo json_encode(['type' => 'success-redirect','url' => site_url()]);
 		die;
 	}
 }
 add_action('wp_ajax_login_user','login_user');
 add_action('wp_ajax_nopriv_login_user','login_user');
+
+
+/**
+ * Handle visitor backer pledge
+ * @return error or success message
+ */
+function add_visitor_backer(){
+	$error = new WP_Error();
+	if (empty($_POST['full_name']) || empty($_POST['email']) || empty($_POST['address']) || empty($_POST['contact'])){
+		$error->add('empty_fields','All fields are required');
+	}
+	if (!isset($_POST['accept_terms'])){
+		$error->add('terms_not_accepted','Please accept the agreement');
+	}
+	//Show warning message if error
+	if (!empty($error->get_error_message())){
+		echo json_encode(['type' => 'alert-warning','text' => $error->get_error_message()]);
+		die;
+	}
+	//Sanitize data
+	$full_name = sanitize_text_field($_POST['full_name']);
+	$email = sanitize_email($_POST['email']);
+	$address = sanitize_text_field($_POST['address']);
+	$contact = sanitize_text_field($_POST['contact']);
+	$project_id = intval($_POST['project_id']);
+	//Insert user into the database
+	global $wpdb;
+	if ($wpdb->insert('rbnd_backers_visitors',['project_id' => $project_id,
+																							'full_name' => $full_name,
+																							'email' => $email,
+																							'address' => $address,
+																							'contact' => $contact])){
+		echo json_encode(['type' => 'success-redirect','url' => get_post_permalink($project_id)."?action=pledge&user_type=visitor&uid=".$wpdb->insert_id]);
+		die;
+	}
+	else{
+		echo json_encode(['type' => 'alert-warning','text' => 'User details not saved']);
+		die;
+	}
+}
+add_action('wp_ajax_nopriv_register_visitor_pledge','add_visitor_backer');

@@ -242,7 +242,7 @@ function reboundnepal_comments_end(){
 function login_check_approved($user,$username,$password){
 	if (!isset($user) || is_wp_error($user)) return new WP_Error('invalid_cred','Invalid username/password');
 	else{
-		if (get_user_meta($user->ID,'approval_status',true) == 1) return $user;
+		if ( user_can($user->ID,'administrator') || get_user_meta($user->ID,'approval_status',true) == 1) return $user;
 		else return new WP_Error('not_verified','Account has not been verified');
 	}
 }
@@ -261,6 +261,17 @@ add_filter('authenticate','login_check_approved',20,3);
 
 //Remove admin bar in frontend
 add_filter('show_admin_bar', '__return_false');
+
+function pledge_page_template( $template ) {
+	if ( is_singular( 'project' ) && isset($_GET['action']) && $_GET['action'] == 'pledge' ) {
+		$new_template = locate_template( array( 'pledge.php' ) );
+		if ( '' != $new_template ) {
+			return $new_template ;
+		}
+	}
+	return $template;
+}
+add_filter( 'template_include', 'pledge_page_template', 99 );
 
 
 //Include file for ajax form handling

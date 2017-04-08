@@ -198,7 +198,7 @@
                   <i class="icon iClock"></i>
                   <span class="val"><span class="fw-b">Funding ends: </span><?php echo date('M d,Y',strtotime(get_field('funding_end_date'))); ?></span>
               </div>
-              <a class="btn btn-green btn-buck-project" href="#">
+              <a class="btn btn-green btn-buck-project" href="<?php echo $_SERVER['REQUEST_URI']."?action=pledge"; ?>">
                   <span class="lbl">Back This Project</span>
                   <span class="desc">$<?php the_field('minimum_pledge_amount'); ?> minimum pledge</span>
               </a>

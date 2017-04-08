@@ -98,207 +98,259 @@
                         </h1>
                         <div class="main-nav clearfix">
                             <div class="nav-item">
-                                <a href="#" class="nav-title">Discover</a>
+                                <a href="#" class="nav-title" id="discover-projects">Discover</a>
                                 <p class="rs nav-description">Great Projects</p>
                             </div>
                             <span class="sep"></span>
                             <div class="nav-item">
-                                <a href="#" class="nav-title">Start</a>
+                                <a href="<?php echo admin_url('post-new.php?post_type=project'); ?>" class="nav-title">Start</a>
                                 <p class="rs nav-description">Your Project</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="dropdown-search-result" style="z-index: 200; display: none;">
-      <div class="container_12">
-        <div class="grid_12 wrap-title-result">
-          <div class="title-result">Projects in <a href="#" class="fc-white">Kathmandu</a></div>
-          <i class="icon iBigX"></i>
-          <i class="iPickUp"></i>
-        </div>
-        <div class="clear"></div>
-        <div class="list-project-result">
-          <div class="grid_3">
-            <div class="project-short sml-thumb">
-              <div class="top-project-info">
-                <div class="content-info-short clearfix">
-                  <a href="#" class="thumb-img">
-                    <img src="images/ex/th-292x204-1.jpg" alt="$TITLE">
-                  </a>
-                  <div class="wrap-short-detail">
-                    <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
-                    <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
-                    <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
-                    <p class="rs project-location">
-                      <i class="icon iLocation"></i>
-                      Kathmandu, Nepal
-                    </p>
-                  </div>
+            <div class="dropdown-search-result" id="discover" style="z-index: 200; display: none;">
+              <div class="container_12">
+                <div class="grid_12 wrap-title-result">
+                  <div class="title-result">Discover our projects</div>
+                  <i class="icon iBigX"></i>
+                  <i class="iPickUp"></i>
+                </div>
+                <div class="clear"></div>
+                <div class="list-project-result">
+                  <div class="grid_6">
+                    <h3 class="fc-white">Categories</h3>
+                    <nav class="lst-category">
+                      <ul class="rs nav nav-category">
+                      <?php
+                        $categories = get_terms(['taxonomy' => 'project-category',
+                                      'hide_empty' => false]);
+                        foreach ($categories as $category) {
+                      ?>
+                        <li>
+                          <a href="<?php echo get_term_link($category); ?>">
+                            <?php echo $category->name; ?>
+                            <span class="count-val">(<?php echo $category->count; ?>)</span>
+                            <i class="icon iPlugGray"></i>
+                          </a>
+                        </li>
+                    <?php } ?>
+                      </ul>
+                    </nav>
+                  </div><!--end: .grid_6 > .project-short-->
+                  <div class="grid_6">
+                    <h3 class="fc-white">Featured</h3>
+                    <nav class="lst-category">
+                      <ul class="rs nav nav-category">
+                      <?php
+                        $featured_cats = get_terms(['taxonomy' => 'featured-category',
+                                                    'hide_empty' => false]);
+                        foreach ($featured_cats as $featured) {
+                      ?>
+                        <li>
+                          <a href="<?php echo get_term_link($featured); ?>">
+                            <?php echo $featured->name; ?>
+                            <span class="count-val">(<?php echo $featured->count; ?>)</span>
+                            <i class="icon iPlugGray"></i>
+                          </a>
+                        </li>
+                    <?php } ?>
+                      </ul>
+                    </nav>
+                  </div><!--end: .grid_6 > .project-short-->
                 </div>
               </div>
-              <div class="bottom-project-info clearfix">
-                <div class="line-progress">
-                  <div class="bg-progress">
-                    <span  style="width: 50%"></span>
-                  </div>
+            </div>
+            <div class="dropdown-search-result" id="search" style="z-index: 200; display: none;">
+              <div class="container_12">
+                <div class="grid_12 wrap-title-result">
+                  <div class="title-result">Projects in <a href="#" class="fc-white">Kathmandu</a></div>
+                  <i class="icon iBigX"></i>
+                  <i class="iPickUp"></i>
                 </div>
-                <div class="group-fee clearfix">
-                  <div class="fee-item">
-                    <p class="rs lbl">Funded</p>
-                    <span class="val">50%</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Pledged</p>
-                    <span class="val">$38,000</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Days Left</p>
-                    <span class="val">25</span>
+                <div class="clear"></div>
+                <div class="list-project-result">
+                  <div class="grid_3">
+                    <div class="project-short sml-thumb">
+                      <div class="top-project-info">
+                        <div class="content-info-short clearfix">
+                          <a href="#" class="thumb-img">
+                            <img src="images/ex/th-292x204-1.jpg" alt="$TITLE">
+                          </a>
+                          <div class="wrap-short-detail">
+                            <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
+                            <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
+                            <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
+                            <p class="rs project-location">
+                              <i class="icon iLocation"></i>
+                              Kathmandu, Nepal
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bottom-project-info clearfix">
+                        <div class="line-progress">
+                          <div class="bg-progress">
+                            <span  style="width: 50%"></span>
+                          </div>
+                        </div>
+                        <div class="group-fee clearfix">
+                          <div class="fee-item">
+                            <p class="rs lbl">Funded</p>
+                            <span class="val">50%</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Pledged</p>
+                            <span class="val">$38,000</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Days Left</p>
+                            <span class="val">25</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!--end: .grid_3 > .project-short-->
+                  <div class="grid_3">
+                    <div class="project-short sml-thumb">
+                      <div class="top-project-info">
+                        <div class="content-info-short clearfix">
+                          <a href="#" class="thumb-img">
+                            <img src="images/ex/th-192x135-1.jpg" alt="$TITLE">
+                          </a>
+                          <div class="wrap-short-detail">
+                            <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
+                            <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
+                            <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
+                            <p class="rs project-location">
+                              <i class="icon iLocation"></i>
+                              Kathmandu, Nepal
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bottom-project-info clearfix">
+                        <div class="line-progress">
+                          <div class="bg-progress">
+                            <span class="success" style="width: 123%"></span>
+                          </div>
+                        </div>
+                        <div class="group-fee clearfix">
+                          <div class="fee-item">
+                            <p class="rs lbl">Funded</p>
+                            <span class="val">123%</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Pledged</p>
+                            <span class="val">$25,000</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Days Left</p>
+                            <span class="val">18</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!--end: .grid_3 > .project-short-->
+                  <div class="grid_3">
+                    <div class="project-short sml-thumb">
+                      <div class="top-project-info">
+                        <div class="content-info-short clearfix">
+                          <a href="#" class="thumb-img">
+                            <img src="images/ex/th-192x135-2.jpg" alt="$TITLE">
+                          </a>
+                          <div class="wrap-short-detail">
+                            <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
+                            <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
+                            <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
+                            <p class="rs project-location">
+                              <i class="icon iLocation"></i>
+                              Kathmandu, Nepal
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bottom-project-info clearfix">
+                        <div class="line-progress">
+                          <div class="bg-progress">
+                            <span  style="width: 21%"></span>
+                          </div>
+                        </div>
+                        <div class="group-fee clearfix">
+                          <div class="fee-item">
+                            <p class="rs lbl">Funded</p>
+                            <span class="val">21%</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Pledged</p>
+                            <span class="val">$850K</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Days Left</p>
+                            <span class="val">2</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!--end: .grid_3 > .project-short-->
+                  <div class="grid_3">
+                    <div class="project-short sml-thumb">
+                      <div class="top-project-info">
+                        <div class="content-info-short clearfix">
+                          <a href="#" class="thumb-img">
+                            <img src="images/ex/th-192x135-3.jpg" alt="$TITLE">
+                          </a>
+                          <div class="wrap-short-detail">
+                            <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
+                            <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
+                            <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
+                            <p class="rs project-location">
+                              <i class="icon iLocation"></i>
+                              Kathmandu, Nepal
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bottom-project-info clearfix">
+                        <div class="line-progress">
+                          <div class="bg-progress">
+                            <span  style="width: 50%"></span>
+                          </div>
+                        </div>
+                        <div class="group-fee clearfix">
+                          <div class="fee-item">
+                            <p class="rs lbl">Funded</p>
+                            <span class="val">50%</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Pledged</p>
+                            <span class="val">$138,662</span>
+                          </div>
+                          <div class="sep"></div>
+                          <div class="fee-item">
+                            <p class="rs lbl">Days Left</p>
+                            <span class="val">44</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!--end: .grid_3 > .project-short-->
+                </div>
+                <div class="grid_12">
+                  <div class="confirm-result">
+                    Were you looking for projects in <a href="#" class="fc-white">Kathmandu</a>, in <a href="#" class="fc-white">Nepal</a>, or matching the word "<a href="#" class="fc-white">Kath</a>"?
+                    <a href="category.html" class="view-all">View all</a>
+                    <span class="clear"></span>
                   </div>
                 </div>
               </div>
             </div>
-          </div><!--end: .grid_3 > .project-short-->
-          <div class="grid_3">
-            <div class="project-short sml-thumb">
-              <div class="top-project-info">
-                <div class="content-info-short clearfix">
-                  <a href="#" class="thumb-img">
-                    <img src="images/ex/th-192x135-1.jpg" alt="$TITLE">
-                  </a>
-                  <div class="wrap-short-detail">
-                    <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
-                    <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
-                    <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
-                    <p class="rs project-location">
-                      <i class="icon iLocation"></i>
-                      Kathmandu, Nepal
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="bottom-project-info clearfix">
-                <div class="line-progress">
-                  <div class="bg-progress">
-                    <span class="success" style="width: 123%"></span>
-                  </div>
-                </div>
-                <div class="group-fee clearfix">
-                  <div class="fee-item">
-                    <p class="rs lbl">Funded</p>
-                    <span class="val">123%</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Pledged</p>
-                    <span class="val">$25,000</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Days Left</p>
-                    <span class="val">18</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!--end: .grid_3 > .project-short-->
-          <div class="grid_3">
-            <div class="project-short sml-thumb">
-              <div class="top-project-info">
-                <div class="content-info-short clearfix">
-                  <a href="#" class="thumb-img">
-                    <img src="images/ex/th-192x135-2.jpg" alt="$TITLE">
-                  </a>
-                  <div class="wrap-short-detail">
-                    <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
-                    <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
-                    <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
-                    <p class="rs project-location">
-                      <i class="icon iLocation"></i>
-                      Kathmandu, Nepal
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="bottom-project-info clearfix">
-                <div class="line-progress">
-                  <div class="bg-progress">
-                    <span  style="width: 21%"></span>
-                  </div>
-                </div>
-                <div class="group-fee clearfix">
-                  <div class="fee-item">
-                    <p class="rs lbl">Funded</p>
-                    <span class="val">21%</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Pledged</p>
-                    <span class="val">$850K</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Days Left</p>
-                    <span class="val">2</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!--end: .grid_3 > .project-short-->
-          <div class="grid_3">
-            <div class="project-short sml-thumb">
-              <div class="top-project-info">
-                <div class="content-info-short clearfix">
-                  <a href="#" class="thumb-img">
-                    <img src="images/ex/th-192x135-3.jpg" alt="$TITLE">
-                  </a>
-                  <div class="wrap-short-detail">
-                    <h3 class="rs acticle-title"><a class="be-fc-orange" href="#">Project title</a></h3>
-                    <p class="rs tiny-desc">by <a href="#" class="fw-b fc-gray be-fc-orange">Binamra Dhakal</a></p>
-                    <p class="rs title-description">Nam sit amet est sapien, a faucibus purus. Pellentesque placerat elementum adipiscing.</p>
-                    <p class="rs project-location">
-                      <i class="icon iLocation"></i>
-                      Kathmandu, Nepal
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="bottom-project-info clearfix">
-                <div class="line-progress">
-                  <div class="bg-progress">
-                    <span  style="width: 50%"></span>
-                  </div>
-                </div>
-                <div class="group-fee clearfix">
-                  <div class="fee-item">
-                    <p class="rs lbl">Funded</p>
-                    <span class="val">50%</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Pledged</p>
-                    <span class="val">$138,662</span>
-                  </div>
-                  <div class="sep"></div>
-                  <div class="fee-item">
-                    <p class="rs lbl">Days Left</p>
-                    <span class="val">44</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!--end: .grid_3 > .project-short-->
-        </div>
-        <div class="grid_12">
-          <div class="confirm-result">
-            Were you looking for projects in <a href="#" class="fc-white">Kathmandu</a>, in <a href="#" class="fc-white">Nepal</a>, or matching the word "<a href="#" class="fc-white">Kath</a>"?
-            <a href="category.html" class="view-all">View all</a>
-            <span class="clear"></span>
-          </div>
-        </div>
-      </div>
-    </div>
   </header><!--end: #header -->

@@ -2,3 +2,28 @@
 .alert-msg{
 	color: red;
 }
+.box-post-comment textarea.txt{
+	height:184px;
+}
+.right-input .accept-checkbox{
+	display: block;
+	margin-top: 32px;
+}
+#discover .nav-category li a{
+	color:#fff;
+}
+#discover .nav-category li a:hover{
+	color:#fa6f1c;
+}
+#discover{
+	padding-bottom: 20px;
+}
+.pagination .alignright{
+	float: right;
+}
+.pagination .alignleft{
+	float: left;
+}
+.list-project h3{
+	margin-left: 9px;
+}
