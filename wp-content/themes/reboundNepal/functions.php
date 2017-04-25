@@ -273,6 +273,13 @@ function pledge_page_template( $template ) {
 }
 add_filter( 'template_include', 'pledge_page_template', 99 );
 
+function alter_query($query){
+	if ($query->is_author()){
+		$query->set('posts_per_page',2);
+	}
+}
+add_action('pre_get_posts','alter_query');
+
 
 //Include file for ajax form handling
 include_once __DIR__."/includes/ajax-functions.php";

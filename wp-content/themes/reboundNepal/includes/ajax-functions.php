@@ -52,10 +52,13 @@ function register_user(){
 		//add token in user meta
 		add_user_meta($id,'user_activation_token',$token);
 		$message .= "Thank you for joining Rebound Nepal.<br>Please verify your account using the following link.<br><a href='".site_url("/verify-account?token={$token}")."'>".site_url("/verify-account?token={$token}")."</a>";
-		$headers[] = 'From: Rebound Nepal <admin@reboundnepal.com>';
+		// $headers[] = 'From: Rebound Nepal <admin@reboundnepal.com>';
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		wp_mail($email,'Rebound Nepal Registration',$message,$headers);
-		echo json_encode(['type' => 'alert-success','text' => 'Please check email to verify your registration.']);
+		if (wp_mail($email,'Rebound Nepal Registration',$message,$headers)){
+			echo json_encode(['type' => 'alert-success','text' => 'Please check email to verify your registration.']);
+		}else{
+			echo json_encode(['type' => 'alert-error','text' => 'Email not sent.']);
+		}
 		die;
 	}
 }

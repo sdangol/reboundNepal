@@ -145,7 +145,7 @@
 								</a>
 								<div class="wrap-short-detail">
 									<h3 class="rs acticle-title"><a class="be-fc-orange" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-									<p class="rs tiny-desc">by <a href="<?php echo get_author_posts_url(); ?>" class="fw-b fc-gray be-fc-orange"><?php the_author(); ?></a></p>
+									<p class="rs tiny-desc">by <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" class="fw-b fc-gray be-fc-orange"><?php the_author(); ?></a></p>
 									<p class="rs title-description"><?php echo wp_trim_words(get_the_content(),25); ?></p>
 									<p class="rs project-location">
 										<i class="icon iLocation"></i>

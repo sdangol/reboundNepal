@@ -28,7 +28,7 @@
 																	</a>
 																	<div class="wrap-short-detail">
 																			<h3 class="rs acticle-title"><a class="be-fc-orange" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-																			<p class="rs tiny-desc">by <a href="<?php get_author_posts_url(get_the_author_meta('ID')) ?>" class="fw-b fc-gray be-fc-orange"><?php the_author(); ?></a></p>
+																			<p class="rs tiny-desc">by <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')) ?>" class="fw-b fc-gray be-fc-orange"><?php the_author(); ?></a></p>
 																			<p class="rs title-description"><?php echo wp_trim_words(get_the_content(),25); ?></p>
 																			<p class="rs project-location">
 																					<i class="icon iLocation"></i>
@@ -77,7 +77,6 @@
 					<div class="rs ta-c pagination">
 						<div class="nav-next alignright"><?php next_posts_link( 'Next' ); ?></div>
 						<div class="nav-prev alignleft"><?php previous_posts_link( 'Prev' ); ?></div>
-						<!-- <a id="showmoreproject" class="btn btn-black btn-load-more" href="#">Show more projects</a> -->
 					</div>
 			</div><!--end: .search-result-page -->
 	</div><!--end: .content -->
