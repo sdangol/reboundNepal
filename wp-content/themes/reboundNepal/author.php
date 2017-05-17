@@ -3,7 +3,6 @@
 	$curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
 	// set the "paged" parameter (use 'page' if the query is on a static front page)
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-	var_dump($paged);
 ?>
 <div class="layout-2cols">
 	<div class="content grid_8">
@@ -11,7 +10,7 @@
 					<div class="project-tab-detail tabbable accordion">
 							<ul class="nav nav-tabs clearfix">
 								<li class="active"><a href="#" class="be-fc-orange">Projects</a></li>
-								<?php if (is_user_logged_in()): ?>
+								<?php if (is_user_logged_in() && get_current_user_id() == $curauth->ID): ?>
 								<li><a href="#">Profile</a></li>
 								<li><a href="#" class="be-fc-orange">Account Settings</a></li>
 								<?php endif; ?>
@@ -81,7 +80,7 @@
 												<?php wp_reset_postdata(); ?>
 											</div><!--end: .tab-pane -->
 								</div>
-								<?php if (is_user_logged_in()): ?>
+								<?php if (is_user_logged_in() && get_current_user_id() == $curauth->ID): ?>
 								<div>
 										<h3 class="rs alternate-tab accordion-label">Profile</h3>
 										<div class="tab-pane accordion-content">

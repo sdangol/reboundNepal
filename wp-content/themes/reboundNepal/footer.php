@@ -80,7 +80,7 @@
 		</div>
 		<div class="grid_6 prefix_1">
 			<div class="form login-form">
-				<form action="<?php echo admin_url('admin-ajax.php?action=register_user'); ?>" class="ajax-form">
+				<form id="register-form" action="<?php echo admin_url('admin-ajax.php?action=register_user'); ?>" class="ajax-form">
 					<h3 class="rs title-form">Register</h3>
 					<div class="box-white">
 						<h4 class="rs title-box">New to Rebound?</h4>
@@ -121,7 +121,7 @@
 		</div>
 		<div class="grid_4">
 			<div class="form login-form">
-				<form action="<?php echo admin_url('admin-ajax.php?action=login_user'); ?>" class="ajax-form"">
+				<form id="login-form" action="<?php echo admin_url('admin-ajax.php?action=login_user'); ?>" class="ajax-form"">
 					<h3 class="rs title-form">Login</h3>
 					<div class="box-white">
 						<h4 class="rs title-box">Already Have an Account?</h4>
@@ -131,7 +131,7 @@
 								<!-- Alert message is shown here -->
 							</div>
 							<label for="txt_email_login">
-								<input id="txt_email_login" class="txt fill-width" type="email" placeholder="Enter your e-mail address" name="email"/>
+								<input id="txt_email_login" class="txt fill-width" type="text" placeholder="Enter your e-mail address" name="email"/>
 							</label>
 							<label for="txt_password_login">
 								<input id="txt_password_login" class="txt fill-width" type="password" placeholder="Enter password" name="password"/>
@@ -142,6 +142,9 @@
 								<span class="lbl-remember">Remember me</span>
 							</label>
 							<p class="rs ta-c pb10">
+								<?php if (isset($_GET['redirect'])): ?>
+									<input type="hidden" name="redirect" value="<?php echo site_url('/'.$_GET['redirect'].'/'); ?>">
+								<?php endif; ?>
 								<button class="btn btn-red btn-submit" type="submit">Login</button>
 							</p>
 							<p class="rs ta-c">
@@ -157,6 +160,7 @@
 </div>
 <script>
 	var admin_ajax_url = "<?php echo admin_url('admin_ajax.php'); ?>";
+	var $get_vars = <?php echo json_encode($_GET); ?>;
 </script>
 <?php wp_footer(); ?>
 </body>

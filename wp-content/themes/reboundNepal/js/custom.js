@@ -53,12 +53,17 @@
     //View payment options on pledging a project
     $('.btn-back-project').on('click',function(e){
     	e.preventDefault();
-    	var form = $(this).closest('.form');
+    	var form = $(this).closest('.form');sys_popup_common
  			//Update amount respectively
     	form.fadeOut('fast',function(){
 	    	form.siblings('.donate-options').fadeIn('fast');
     	});
-    })
+    });
+
+    //Show login popup if not logged in
+    if ($get_vars.auth == 'required'){
+    	$('#sys_popup_common').fadeIn();
+    }
   });
  // The rest of the code goes here!
 }(window.jQuery, window, document));

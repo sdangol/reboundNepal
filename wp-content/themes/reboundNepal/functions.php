@@ -87,7 +87,7 @@ function reboundnepal_register_post_types(){
 																						 'view_item' => 'View Project',
 																						 'not_found' => 'No Project Found'],
 																'public' => true,
-																'supports' => ['title','editor','thumbnail','custom-fields','comments'],
+																'supports' => ['title','editor','thumbnail','custom-fields','comments','author'],
 																'menu_icon' => 'dashicons-media-spreadsheet',
 																'taxonomies' => ['project-category']]);
 	//Register Project
@@ -276,9 +276,45 @@ add_filter( 'template_include', 'pledge_page_template', 99 );
 function alter_query($query){
 	if ($query->is_author()){
 		$query->set('posts_per_page',2);
+	}elseif($query->is_tax()){
+		$query->set('posts_per_page',6);
 	}
 }
 add_action('pre_get_posts','alter_query');
+
+
+/**
+ * Add project from frontend
+ */
+function my_pre_save_post( $post_id ) {
+  // check if this is to be a new post
+  if( $post_id == 'new' ) {
+	  $post = array(
+	      'post_status'  => 'publish',
+	      'post_title'  => $_POST['title'],
+	      'post_content' => $_POST['description'],
+	      'post_type'  => 'project',
+	  );
+	  // insert the post
+	  $post_id = wp_insert_post( $post );
+	}else{
+		wp_update_post(['ID' => $post_id,
+										'post_title'  => $_POST['title'],
+	      						'post_content' => $_POST['description']]);
+	}
+    //Assign project category
+    wp_set_object_terms($post_id,$_POST['category'],'project-category');
+
+    //Set post thumbnail
+    set_post_thumbnail($post_id,$_POST['feature-image']);
+
+    //Save the acf fields
+    do_action('acf/save_post', $post_id);
+
+    wp_redirect(get_permalink($post_id));
+    die;
+}
+add_filter('acf/pre_save_post' , 'my_pre_save_post' );
 
 
 //Include file for ajax form handling

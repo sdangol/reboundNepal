@@ -82,15 +82,15 @@ function login_user(){
 	}
 	$remember = (isset($_POST['remember']))?1:0;
 	//Sanitize data
-	$email = sanitize_email($_POST['email']);
-	if ($login = wp_signon(['user_login' => $email,
+	if ($login = wp_signon(['user_login' => $_POST['email'],
 									'user_password' => $_POST['password'],
 									'remember' => $remember])){
 		if (is_wp_error($login)){
 			echo json_encode(['type' => 'alert-warning','text' => $login->get_error_message()]);
 			die;
 		}
-		echo json_encode(['type' => 'success-redirect','url' => site_url()]);
+		$redirect = (isset($_POST['redirect']))?$_POST['redirect']:site_url();
+		echo json_encode(['type' => 'success-redirect','url' => $redirect]);
 		die;
 	}
 }

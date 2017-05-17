@@ -14,6 +14,7 @@
                       <div class="thumb-img">
                           <div class="rslides_container">
                             <ul class="rslides" id="slider1">
+                              <li><?php the_post_thumbnail('full'); ?></li>
                             	<?php
                             		$slides = get_field('images');
                             		foreach ($slides as $slide) {
@@ -205,6 +206,11 @@
               <p class="rs description">This project will only be funded if at least $<?php the_field('stretch_target'); ?> is pledged by <?php echo date('l M d,Y',strtotime(get_field('funding_end_date'))); ?>.</p>
           </div>
       </div><!--end: .project-runtime -->
+      <?php if (is_user_logged_in() && get_the_author_meta('ID') == get_current_user_id()): ?>
+        <div class="edit-project">
+          <a class="btn btn-red" href="<?php echo add_query_arg('proj',get_the_ID(),site_url('/edit-project/')); ?>">Edit this project</a>
+        </div>
+      <?php endif; ?>
       <div class="project-author">
           <div class="box-gray">
               <h3 class="title-box">Project by</h3>
