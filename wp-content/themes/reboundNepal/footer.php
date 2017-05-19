@@ -153,6 +153,23 @@
 						</div>
 					</div>
 				</form>
+				<form id="forgot-password" action="<?php echo admin_url('admin-ajax.php?action=forgot_password'); ?>" class="ajax-form"">
+					<h3 class="rs title-form">Forgot Password</h3>
+					<div class="box-white">
+						<p class="rs">We will send you a reset link.</p>
+						<div class="form-action">
+							<div class="alert-msg" style="display:none;">
+								<!-- Alert message is shown here -->
+							</div>
+							<label for="txt_email_login">
+								<input id="txt_email_login" class="txt fill-width" type="email" placeholder="Enter your e-mail address" name="email"/>
+							</label>
+							<p class="rs ta-c">
+								<a href="#" class="fc-orange">Send reset link</a>
+							</p>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		<div class="clear"></div>

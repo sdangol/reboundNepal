@@ -20,13 +20,9 @@
 											<h3 class="rs alternate-tab accordion-label">Projects</h3>
 											<div class="tab-pane accordion-content active">
 												<?php
-													$projects = new WP_Query(['author' => $curauth->ID,
-																										'post_type' => 'project',
-																										'posts_per_page' => 2,
-																										'paged' => $paged]);
-													if ($projects->have_posts()):
-														while ($projects->have_posts()):
-															$projects->the_post();
+													if (have_posts()):
+														while (have_posts()):
+															the_post();
 												?>
 													<div class="box-marked-project project-short inside-tab">
 															<div class="top-project-info">
@@ -71,7 +67,7 @@
 													</div><!--end: .box-marked-project -->
 												<?php endwhile; ?>
 												<div class="rs ta-c pagination">
-													<div class="nav-next alignright"><?php next_posts_link( 'Next', $projects->max_num_pages ); ?></div>
+													<div class="nav-next alignright"><?php next_posts_link( 'Next' ); ?></div>
 													<div class="nav-prev alignleft"><?php previous_posts_link( 'Prev' ); ?></div>
 												</div>
 												<?php	else: ?>
@@ -85,40 +81,49 @@
 										<h3 class="rs alternate-tab accordion-label">Profile</h3>
 										<div class="tab-pane accordion-content">
 												<div class="form form-profile">
-														<form action="<?php echo admin_url('admin-ajax.php?action=editprofile') ?>">
+														<form action="<?php echo admin_url('admin-ajax.php?action=editprofile') ?>" class="ajax-form">
+																<div class="alert-msg">
+																	
+																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_name1">First Name:</label>
+																		<label class="lbl" for="txt_name1">First Name*:</label>
 																		<div class="val">
-																				<input class="txt" type="text" id="txt_name1" value="" name="first_name">
+																				<input class="txt" type="text" id="txt_name1" value="<?php echo get_user_meta($curauth->ID,'first_name',true); ?>" name="first_name">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_name1">Last Name:</label>
+																		<label class="lbl" for="txt_name1">Last Name*:</label>
 																		<div class="val">
-																				<input class="txt" type="text" id="txt_name1" value="" name="last_name">
+																				<input class="txt" type="text" id="txt_name1" value="<?php echo get_user_meta($curauth->ID,'last_name',true); ?>" name="last_name">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_location">Address:</label>
+																		<label class="lbl" for="txt_name1">Email*:</label>
 																		<div class="val">
-																				<input class="txt" type="text" id="txt_location" value="" name="address">
+																				<input class="txt" type="email" id="txt_name1" value="<?php echo $curauth->user_email; ?>" name="email">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_time_zone">Contact:</label>
+																		<label class="lbl" for="txt_location">Address*:</label>
 																		<div class="val">
-																				<input class="txt" type="text" id="txt_time_zone" value="" name="phone">
+																				<input class="txt" type="text" id="txt_location" value="<?php echo get_user_meta($curauth->ID,'address',true); ?>" name="address">
+																		</div>
+																</div>
+																<div class="row-item clearfix">
+																		<label class="lbl" for="txt_time_zone">Contact*:</label>
+																		<div class="val">
+																				<input class="txt" type="text" id="txt_time_zone" value="<?php echo get_user_meta($curauth->ID,'phone',true); ?>" name="phone">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
 																		<label class="lbl" for="txt_bio">Biography:</label>
 																		<div class="val">
-																				<textarea class="txt fill-width" name="txt_bio" id="txt_bio" cols="30" rows="10" name="biography"></textarea>
+																				<textarea class="txt fill-width" id="txt_bio" cols="30" rows="10" name="biography"><?php echo get_user_meta($curauth->ID,'description',true); ?></textarea>
 																				<p class="rs description-input">We suggest a short bio. If it’s 300 characters or less it’ll look great on your profile.</p>
 																		</div>
 																</div>
 																<p class="wrap-btn-submit rs ta-r">
-																		<button class="btn btn-red btn-submit-all">Save all settings</button>
+																		<button class="btn btn-red btn-submit-all">Update Profile</button>
 																</p>
 														</form>
 												</div>
@@ -128,7 +133,34 @@
 										<h3 class="rs alternate-tab accordion-label">Account</h3>
 										<div class="tab-pane accordion-content">
 												<div class="tab-pane-inside">
-												<!-- Password change settings-->
+													<!-- Password change settings-->
+													<div class="form form-profile">
+														<form action="<?php echo admin_url('admin-ajax.php?action=change_password') ?>" class="ajax-form">
+															<div class="alert-msg">
+															</div>
+															<div class="row-item clearfix">
+																	<label class="lbl" for="txt_name1">Old Password*:</label>
+																	<div class="val">
+																			<input class="txt" type="password" id="txt_name1" value="" name="old_password">
+																	</div>
+															</div>
+															<div class="row-item clearfix">
+																<label class="lbl" for="txt_name1">New Password*:</label>
+																<div class="val">
+																	<input class="txt" type="password" id="txt_name1" value="" name="new_password">
+																</div>
+															</div>
+															<div class="row-item clearfix">
+																	<label class="lbl" for="txt_name1">Confirm Password*:</label>
+																	<div class="val">
+																			<input class="txt" type="password" id="txt_name1" value="" name="password_confirm">
+																	</div>
+															</div>
+															<p class="wrap-btn-submit rs ta-r">
+																<button class="btn btn-red btn-submit-all">Change Password</button>
+															</p>
+														</form>
+													</div>
 												</div>
 										</div><!--end: .tab-pane -->
 								</div>

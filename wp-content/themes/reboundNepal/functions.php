@@ -273,14 +273,24 @@ function pledge_page_template( $template ) {
 }
 add_filter( 'template_include', 'pledge_page_template', 99 );
 
-function alter_query($query){
-	if ($query->is_author()){
-		$query->set('posts_per_page',2);
-	}elseif($query->is_tax()){
-		$query->set('posts_per_page',6);
-	}
+function alter_query( $query ) {
+    if ( is_admin() || ! $query->is_main_query() )
+        return;
+
+    if ( is_tax() ) {
+        // Display only 1 post for the original blog archive
+        $query->set( 'posts_per_page', 6 );
+        return;
+    }
+
+    if ( is_author() ) {
+        // Display 50 posts for a custom post type called 'movie'
+        $query->set( 'post_type', 'project' );
+        $query->set( 'posts_per_page', 2 );
+        return;
+    }
 }
-add_action('pre_get_posts','alter_query');
+add_action( 'pre_get_posts', 'alter_query', 1 );
 
 
 /**

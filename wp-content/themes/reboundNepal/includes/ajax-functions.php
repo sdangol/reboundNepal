@@ -137,3 +137,75 @@ function add_visitor_backer(){
 	}
 }
 add_action('wp_ajax_nopriv_register_visitor_pledge','add_visitor_backer');
+
+
+/**
+ * Edit profile info
+ */
+function edit_user_profile(){
+	$error = new WP_Error();
+	if (empty($_POST['first_name']) || empty($_POST['last_name']) || empty($_POST['address']) || empty($_POST['email']) || empty($_POST['phone'])){
+		$error->add('empty_fields','Fields marked * are required');
+	}
+	if (!is_email( $_POST['email'])){
+		$error->add('invalid_email','Please enter a valid email');
+	}
+	if ($existing = email_exists( $_POST['email']) && $existing != get_current_user_id()){
+		$error->add('invalid_email','Email is already registered in the system');
+	}
+	//Show warning message if error
+	if (!empty($error->get_error_message())){
+		echo json_encode(['type' => 'alert-warning','text' => $error->get_error_message()]);
+		die;
+	}
+	//Update user data
+	$first_name = sanitize_text_field($_POST['first_name']);
+	$last_name = sanitize_text_field($_POST['last_name']);
+	$email = sanitize_email($_POST['email']);
+	$address = sanitize_text_field($_POST['address']);
+	$phone = sanitize_text_field($_POST['phone']);
+	$description = sanitize_textarea_field($_POST['biography']);
+	if (wp_update_user(['ID' => get_current_user_id(),
+									'user_email' => $email,
+									'first_name' => $first_name,
+									'last_name' => $last_name,
+									'display_name' => $first_name.' '.$last_name,
+									'description' => $description])){
+		update_user_meta(get_current_user_id(),'address',$address);
+		update_user_meta(get_current_user_id(),'phone',$phone);
+		echo json_encode(['type' => 'alert-success','text' => 'User profile updated']);
+		die;
+	}
+	else{
+		echo json_encode(['type' => 'alert-warning','text' => 'Profile not updated']);
+		die;
+	}
+}
+add_action('wp_ajax_editprofile','edit_user_profile');
+
+
+/**
+ * Change password
+ */
+function change_user_password(){
+	$error = new WP_Error();
+	if (empty($_POST['old_password']) || empty($_POST['new_password']) || empty($_POST['password_confirm'])){
+		$error->add('empty_fields','Fields marked * are required');
+	}
+	if ($_POST['new_password'] != $_POST['password_confirm']){
+		$error->add('password_mismatch','Passwords donot match');
+	}
+	$user = wp_get_current_user();
+	if (!wp_check_password($_POST['old_password'],$user->user_pass)){
+		$error->add('incorrect_password','The old password is incorrect');
+	}
+	//Show warning message if error
+	if (!empty($error->get_error_message())){
+		echo json_encode(['type' => 'alert-warning','text' => $error->get_error_message()]);
+		die;
+	}
+	wp_set_password($_POST['new_password'],$user->ID);
+	echo json_encode(['type' => 'alert-success','text' => 'Password changed successfully']);
+	die;
+}
+add_action('wp_ajax_change_password','change_user_password');

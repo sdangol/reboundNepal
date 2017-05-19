@@ -47,7 +47,7 @@ if (is_user_logged_in()):
 																		<label for="">Description</label>
 																	</p>
 																	<div class="acf-input-wrap">
-																		<?php wp_editor((isset($cur_post))?$cur_post->description:'','description'); ?>
+																		<?php wp_editor((isset($cur_post))?$cur_post->post_content:'','description'); ?>
 																	</div>
 																</div>
 																<div class="field">

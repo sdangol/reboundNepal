@@ -37,7 +37,6 @@
 				}else{
 					//Show error 
 					$(this).find('.alert-msg').addClass(response.type).text(response.text).show();
-					if (response.type == 'alert-success') $(this).reset();
 				}
 			})
 			.fail(function() {
@@ -53,7 +52,7 @@
     //View payment options on pledging a project
     $('.btn-back-project').on('click',function(e){
     	e.preventDefault();
-    	var form = $(this).closest('.form');sys_popup_common
+    	var form = $(this).closest('.form');
  			//Update amount respectively
     	form.fadeOut('fast',function(){
 	    	form.siblings('.donate-options').fadeIn('fast');
