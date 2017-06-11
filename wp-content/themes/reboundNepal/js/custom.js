@@ -29,15 +29,26 @@
 				context:this,
 				data: $(this).serialize(),
 			})
-			.done(function(response) {
-				response = $.parseJSON(response);
-				if (response.type == 'success-redirect'){
-					//Reload the page if success
-					window.location.href = response.url;
-				}else{
-					//Show error 
-					$(this).find('.alert-msg').addClass(response.type).text(response.text).show();
-				}
+			.done(function(res) {
+				// var isJSON = true;
+				// try{
+					response = $.parseJSON(res);
+				// }catch(err){
+				// 	isJSON = false;
+				// }
+				// if (isJSON) {
+					if (response.type == 'success-redirect'){
+						//Reload the page if success
+						window.location.href = response.url;
+					}else{
+						//Show error 
+						$(this).find('.alert-msg').addClass(response.type).text(response.text).show();
+					}
+				// }
+				// else{
+				// 	response = $.parseHTML(res);
+				// 	debugger;
+				// }
 			})
 			.fail(function() {
 				console.log("error");
@@ -63,6 +74,15 @@
     if ($get_vars.auth == 'required'){
     	$('#sys_popup_common').fadeIn();
     }
+
+    $('#forgot-password-toggle').on('click',function(){
+    	$('#login-form').hide();
+    	$('#forgot-password').show();
+    });
+    $('.login-form-toggle').on('click',function(){
+    	$('#forgot-password').hide();
+    	$('#login-form').show();
+    });
   });
  // The rest of the code goes here!
 }(window.jQuery, window, document));

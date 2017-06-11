@@ -23,7 +23,7 @@ function reboundnepal_scripts() {
 
 	//Add js files
 	wp_enqueue_script( 'raphael-js', get_theme_file_uri( '/js/raphael-min.js' ), array(), '1.0', true );
-	wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-1.9.1.min.js' ), array(), '1.9.1', true );
+	wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-1.9.1.min.js' ));
 	wp_enqueue_script( 'jQuery-migrate', get_theme_file_uri( '/js/jquery-migrate-1.2.1.min.js' ), array(), '1.2.1', true );
 	wp_enqueue_script( 'touchwipe-js', get_theme_file_uri( '/js/jquery.touchwipe.min.js' ), array(), '1.0', true );
 	wp_enqueue_script( 'md-slider-js', get_theme_file_uri( '/js/md_slider.min.js' ), array(), '1.0', true );
@@ -148,6 +148,39 @@ function get_days_left($project_id){
 	$today = strtotime(date('Y-m-d'));
 	$days_left = floor( ($end_date - $today)/(60*60*24) );
 	return $days_left;
+}
+
+/**
+ * Get the amount funded of a project
+ * @param  int 		$project_id Project ID
+ */
+function get_project_funded_amount($project_id){
+	global $wpdb;
+	$funded_amount = $wpdb->get_var($wpdb->prepare('SELECT SUM(total) FROM ((SELECT SUM(pledged_amount) as total FROM rbnd_backers_registered WHERE project_id = %d) UNION ALL (SELECT SUM(pledged_amount) as total FROM rbnd_backers_visitors WHERE project_id = %d) ) t1',$project_id,$project_id));
+	return isset($funded_amount)?$funded_amount:0;
+}
+
+/**
+ * Get the percentage funded of a project
+ * @param  int 		$project_id Project ID
+ */
+function get_project_completed_percentage($project_id){
+	$project = get_post($project_id);
+	global $wpdb;
+	$funded_amount = get_project_funded_amount($project_id);
+	$target_amount = get_post_meta($project_id,'stretch_target',true);
+	$percentage = $funded_amount/$target_amount*100;
+	return round($percentage);
+}
+
+/**
+ * Get the total backers of a project
+ * @param  int 		$project_id Project ID
+ */
+function get_project_backers($project_id){
+	global $wpdb;
+	$backers = $wpdb->get_var($wpdb->prepare('SELECT SUM(total) FROM ((SELECT COUNT(*) as total FROM rbnd_backers_registered WHERE project_id = %d AND pledged_amount IS NOT NULL) UNION ALL (SELECT COUNT(*) as total FROM rbnd_backers_visitors WHERE project_id = %d AND pledged_amount IS NOT NULL)) t1',$project_id,$project_id));
+	return $backers;
 }
 
 /**
@@ -326,6 +359,139 @@ function my_pre_save_post( $post_id ) {
 }
 add_filter('acf/pre_save_post' , 'my_pre_save_post' );
 
+
+/**
+ * Redirects to the custom password reset page, or the login page
+ * if there are errors.
+ */
+function redirectToCustomPasswordReset() {
+  if ( 'GET' == $_SERVER['REQUEST_METHOD'] ) {
+  	$check = check_password_reset_key($_REQUEST['key'],$_REQUEST['login']);
+  	if (is_wp_error($check)){
+  		$redirect_url = site_url('?auth=required&err=invalid-reset');
+  	}else{
+	    $redirect_url = site_url("?auth=required&form=resetpass&key={$_REQUEST['key']}&login={$_REQUEST['login']}");
+	  }
+    wp_redirect( $redirect_url );
+    exit;
+  }
+}
+add_action( 'login_form_rp','redirectToCustomPasswordReset');
+add_action( 'login_form_resetpass','redirectToCustomPasswordReset');
+
+
+if (!function_exists('retrieve_password')){
+	/**
+	 * Handles sending password retrieval email to user.
+	 *
+	 * @return bool|WP_Error True: when finish. WP_Error on error
+	 */
+	function retrieve_password() {
+		$errors = new WP_Error();
+
+		if ( empty( $_POST['user_login'] ) ) {
+			$errors->add('empty_username', __('<strong>ERROR</strong>: Enter a username or email address.'));
+		} elseif ( strpos( $_POST['user_login'], '@' ) ) {
+			$user_data = get_user_by( 'email', trim( wp_unslash( $_POST['user_login'] ) ) );
+			if ( empty( $user_data ) )
+				$errors->add('invalid_email', __('<strong>ERROR</strong>: There is no user registered with that email address.'));
+		} else {
+			$login = trim($_POST['user_login']);
+			$user_data = get_user_by('login', $login);
+		}
+
+		/**
+		 * Fires before errors are returned from a password reset request.
+		 *
+		 * @since 2.1.0
+		 * @since 4.4.0 Added the `$errors` parameter.
+		 *
+		 * @param WP_Error $errors A WP_Error object containing any errors generated
+		 *                         by using invalid credentials.
+		 */
+		do_action( 'lostpassword_post', $errors );
+
+		if ( $errors->get_error_code() )
+			return $errors;
+
+		if ( !$user_data ) {
+			$errors->add('invalidcombo', __('<strong>ERROR</strong>: Invalid username or email.'));
+			return $errors;
+		}
+
+		// Redefining user_login ensures we return the right case in the email.
+		$user_login = $user_data->user_login;
+		$user_email = $user_data->user_email;
+		$key = get_password_reset_key( $user_data );
+
+		if ( is_wp_error( $key ) ) {
+			return $key;
+		}
+
+		$message = __('Someone has requested a password reset for the following account:') . "\r\n\r\n";
+		$message .= network_home_url( '/' ) . "\r\n\r\n";
+		$message .= sprintf(__('Username: %s'), $user_login) . "\r\n\r\n";
+		$message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
+		$message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
+		$message .= '<' . network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . ">\r\n";
+
+		if ( is_multisite() ) {
+			$blogname = get_network()->site_name;
+		} else {
+			/*
+			 * The blogname option is escaped with esc_html on the way into the database
+			 * in sanitize_option we want to reverse this for the plain text arena of emails.
+			 */
+			$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
+		}
+
+		/* translators: Password reset email subject. 1: Site name */
+		$title = sprintf( __('[%s] Password Reset'), $blogname );
+
+		/**
+		 * Filters the subject of the password reset email.
+		 *
+		 * @since 2.8.0
+		 * @since 4.4.0 Added the `$user_login` and `$user_data` parameters.
+		 *
+		 * @param string  $title      Default email title.
+		 * @param string  $user_login The username for the user.
+		 * @param WP_User $user_data  WP_User object.
+		 */
+		$title = apply_filters( 'retrieve_password_title', $title, $user_login, $user_data );
+
+		/**
+		 * Filters the message body of the password reset mail.
+		 *
+		 * @since 2.8.0
+		 * @since 4.1.0 Added `$user_login` and `$user_data` parameters.
+		 *
+		 * @param string  $message    Default mail message.
+		 * @param string  $key        The activation key.
+		 * @param string  $user_login The username for the user.
+		 * @param WP_User $user_data  WP_User object.
+		 */
+		$message = apply_filters( 'retrieve_password_message', $message, $key, $user_login, $user_data );
+
+		if ( $message && !wp_mail( $user_email, wp_specialchars_decode( $title ), $message ) )
+			wp_die( __('The email could not be sent.') . "<br />\n" . __('Possible reason: your host may have disabled the mail() function.') );
+
+		return true;
+	}
+}
+
+function deleteProject(){
+	if (is_admin() || get_current_user_id() == get_post_field('post_author',$_POST['project_id'])){
+		wp_trash_post($_POST['project_id']);
+	}
+	wp_redirect(get_author_posts_url(get_current_user_id()));
+	die;
+}
+add_action('admin_post_deleteProject','deleteProject');
+
+function verify_donor_status($response){
+}
+add_action('paypal_ipn_for_wordpress_ipn_response_handler','verify_donor_status');
 
 //Include file for ajax form handling
 include_once __DIR__."/includes/ajax-functions.php";

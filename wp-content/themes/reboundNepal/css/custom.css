@@ -129,3 +129,10 @@
   border-radius: 3px;
   padding: 5px;
 }
+
+.delete-form{
+	display: inline;
+}
+.text-center{
+	text-align: center;
+}

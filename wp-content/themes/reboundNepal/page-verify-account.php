@@ -29,9 +29,6 @@ get_header();
 				<div class="wrap-2col">
 					<div class="left-intro">
 						<?php the_content(); ?>
-						<!-- <h4 class="rs title-intro">Start your project at Rebound!</h4>
-						<p class="rs pb20">Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.</p>
-						<p class="rs pb20">Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Nam eget dui. Etiam rhoncus. </p> -->
 						<a class="btn btn-red btn-star-project" href="#">
 							<span class="lbl">Start project</span>
 							<span class="desc">Its free</span>

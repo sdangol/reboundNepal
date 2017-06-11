@@ -121,39 +121,66 @@
 		</div>
 		<div class="grid_4">
 			<div class="form login-form">
-				<form id="login-form" action="<?php echo admin_url('admin-ajax.php?action=login_user'); ?>" class="ajax-form"">
-					<h3 class="rs title-form">Login</h3>
-					<div class="box-white">
-						<h4 class="rs title-box">Already Have an Account?</h4>
-						<p class="rs">Please log in to continue.</p>
-						<div class="form-action">
-							<div class="alert-msg" style="display:none;">
-								<!-- Alert message is shown here -->
+				<?php if (isset($_GET['form']) && $_GET['form'] == 'resetpass' && isset($_GET['key']) && isset($_GET['login'])): ?>
+					<form id="reset-password" action="<?php echo admin_url('admin-ajax.php?action=reset_password'); ?>" class="ajax-form">
+						<input type="hidden" name="key" value="<?php echo $_GET['key']; ?>">
+						<input type="hidden" name="login" value="<?php echo $_GET['login']; ?>">
+						<h3 class="rs title-form">Reset your Password</h3>
+						<div class="box-white">
+							<div class="form-action">
+								<div class="alert-msg" style="display:none;">
+									<!-- Alert message is shown here -->
+								</div>
+								<label for="txt_password">
+									<input id="txt_password" class="txt fill-width" type="password" placeholder="Enter your new password" name="password"/>
+								</label>
+								<label for="txt_password_confirm">
+									<input id="txt_password_confirm" class="txt fill-width" type="password" placeholder="Re-type Password" name="password_confirm"/>
+								</label>
+								<p class="rs ta-c pb10">
+									<button class="btn btn-red btn-submit" type="submit">Confirm</button>
+								</p>
+								<p class="rs ta-c">
+									<a href="#" class="fc-orange login-form-toggle">Back to login</a>
+								</p>
 							</div>
-							<label for="txt_email_login">
-								<input id="txt_email_login" class="txt fill-width" type="text" placeholder="Enter your e-mail address" name="email"/>
-							</label>
-							<label for="txt_password_login">
-								<input id="txt_password_login" class="txt fill-width" type="password" placeholder="Enter password" name="password"/>
-							</label>
-
-							<label for="chk_remember" class="rs pb20 clearfix">
-								<input id="chk_remember" type="checkbox" class="chk-remember" name="remember"/>
-								<span class="lbl-remember">Remember me</span>
-							</label>
-							<p class="rs ta-c pb10">
-								<?php if (isset($_GET['redirect'])): ?>
-									<input type="hidden" name="redirect" value="<?php echo site_url('/'.$_GET['redirect'].'/'); ?>">
-								<?php endif; ?>
-								<button class="btn btn-red btn-submit" type="submit">Login</button>
-							</p>
-							<p class="rs ta-c">
-								<a href="#" class="fc-orange">I forgot my password</a>
-							</p>
 						</div>
-					</div>
-				</form>
-				<form id="forgot-password" action="<?php echo admin_url('admin-ajax.php?action=forgot_password'); ?>" class="ajax-form"">
+					</form>
+				<?php else: ?>
+					<form id="login-form" action="<?php echo admin_url('admin-ajax.php?action=login_user'); ?>" class="ajax-form"">
+						<h3 class="rs title-form">Login</h3>
+						<div class="box-white">
+							<h4 class="rs title-box">Already Have an Account?</h4>
+							<p class="rs">Please log in to continue.</p>
+							<div class="form-action">
+								<div class="alert-msg" style="display:none;">
+									<!-- Alert message is shown here -->
+								</div>
+								<label for="txt_email_login">
+									<input id="txt_email_login" class="txt fill-width" type="text" placeholder="Enter your e-mail address" name="email"/>
+								</label>
+								<label for="txt_password_login">
+									<input id="txt_password_login" class="txt fill-width" type="password" placeholder="Enter password" name="password"/>
+								</label>
+
+								<label for="chk_remember" class="rs pb20 clearfix">
+									<input id="chk_remember" type="checkbox" class="chk-remember" name="remember"/>
+									<span class="lbl-remember">Remember me</span>
+								</label>
+								<p class="rs ta-c pb10">
+									<?php if (isset($_GET['redirect'])): ?>
+										<input type="hidden" name="redirect" value="<?php echo site_url('/'.$_GET['redirect'].'/'); ?>">
+									<?php endif; ?>
+									<button class="btn btn-red btn-submit" type="submit">Login</button>
+								</p>
+								<p class="rs ta-c">
+									<a href="#" class="fc-orange" id="forgot-password-toggle">I forgot my password</a>
+								</p>
+							</div>
+						</div>
+					</form>
+				<?php endif; ?>
+				<form id="forgot-password" action="<?php echo admin_url('admin-ajax.php?action=forgot_password'); ?>" class="ajax-form" style="display: none;">
 					<h3 class="rs title-form">Forgot Password</h3>
 					<div class="box-white">
 						<p class="rs">We will send you a reset link.</p>
@@ -162,10 +189,13 @@
 								<!-- Alert message is shown here -->
 							</div>
 							<label for="txt_email_login">
-								<input id="txt_email_login" class="txt fill-width" type="email" placeholder="Enter your e-mail address" name="email"/>
+								<input id="txt_email_login" class="txt fill-width" type="text" placeholder="Enter your e-mail address or username" name="user_login"/>
 							</label>
+							<p class="rs ta-c pb10">
+								<button class="btn btn-red btn-submit" type="submit">Send reset link</button>
+							</p>
 							<p class="rs ta-c">
-								<a href="#" class="fc-orange">Send reset link</a>
+								<a href="#" class="fc-orange login-form-toggle">Back to login</a>
 							</p>
 						</div>
 					</div>

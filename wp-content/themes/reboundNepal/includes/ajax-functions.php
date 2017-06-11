@@ -62,7 +62,6 @@ function register_user(){
 		die;
 	}
 }
-add_action('wp_ajax_register_user','register_user');
 add_action('wp_ajax_nopriv_register_user','register_user');
 
 
@@ -94,7 +93,6 @@ function login_user(){
 		die;
 	}
 }
-add_action('wp_ajax_login_user','login_user');
 add_action('wp_ajax_nopriv_login_user','login_user');
 
 
@@ -209,3 +207,51 @@ function change_user_password(){
 	die;
 }
 add_action('wp_ajax_change_password','change_user_password');
+
+
+/**
+ * Lost password
+ */
+function send_password_recovery_mail(){
+	$error = retrieve_password();
+	$error = new WP_Error();
+	//Show warning message if error
+	if (!empty($error->get_error_message())){
+		echo json_encode(['type' => 'alert-warning','text' => $error->get_error_message()]);
+		die;
+	}
+  if ( is_wp_error( $pass_err ) ) {
+  	echo json_encode(['type' => 'alert-warning','text' => $pass_err->get_error_message()]);
+		die;
+  }else{
+		echo json_encode(['type' => 'alert-success','text' => 'Reset link has been sent to your email']);
+		die;
+	}
+}
+add_action('wp_ajax_nopriv_forgot_password','send_password_recovery_mail');
+
+
+function reset_user_password(){
+	$error = new WP_Error();
+	if (empty($_POST['password']) || empty($_POST['password_confirm'])){
+		$error->add('empty_fields','Fields marked * are required');
+	}
+	if ($_POST['password'] != $_POST['password_confirm']){
+		$error->add('password_mismatch','Passwords donot match');
+	}
+	//Show warning message if error
+	if (!empty($error->get_error_message())){
+		echo json_encode(['type' => 'alert-warning','text' => $error->get_error_message()]);
+		die;
+	}
+	$user = check_password_reset_key( $_POST['key'], $_POST['login'] );
+	if ( ! $user || is_wp_error( $user ) ) {
+  	echo json_encode(['type' => 'alert-warning','text' => $user->get_error_message()]);
+		die;
+  }
+	// Parameter checks OK, reset password
+  reset_password( $user, $_POST['password'] );
+	echo json_encode(['type' => 'alert-success','text' => 'Password changed successfully']);
+	die;
+}
+add_action('wp_ajax_nopriv_reset_password','reset_user_password');

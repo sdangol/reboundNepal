@@ -26,28 +26,7 @@
                       </div>
                   </div>
               </div><!--end: .top-project-info -->
-              <div class="bottom-project-info clearfix">
-                  <div class="project-progress sys_circle_progress" data-percent="87">
-                      <div class="sys_holder_sector"></div>
-                  </div>
-                  <div class="group-fee clearfix">
-                      <div class="fee-item">
-                          <p class="rs lbl">Backers</p>
-                          <span class="val">270</span>
-                      </div>
-                      <div class="sep"></div>
-                      <div class="fee-item">
-                          <p class="rs lbl">Pledged</p>
-                          <span class="val">$38,000</span>
-                      </div>
-                      <div class="sep"></div>
-                      <div class="fee-item">
-                          <p class="rs lbl">Days Left</p>
-                          <span class="val"><?php echo get_days_left(get_the_ID()); ?></span>
-                      </div>
-                  </div>
-                  <div class="clear"></div>
-              </div>
+              <?php get_template_part('template-parts/content','project-info'); ?>
           </div>
           <div class="project-tab-detail tabbable accordion">
               <ul class="nav nav-tabs clearfix">
@@ -209,6 +188,10 @@
       <?php if (is_user_logged_in() && get_the_author_meta('ID') == get_current_user_id()): ?>
         <div class="edit-project">
           <a class="btn btn-red" href="<?php echo add_query_arg('proj',get_the_ID(),site_url('/edit-project/')); ?>">Edit this project</a>
+          <form action="<?php echo admin_url('admin-post.php?action=deleteProject') ?>" method="POST" class="delete-form">
+            <a class="btn btn-black trash-btn" href="#">Delete this project</a>
+            <input type="hidden" name="project_id" value="<?php the_ID(); ?>">
+          </form>
         </div>
       <?php endif; ?>
       <div class="project-author">
@@ -334,6 +317,18 @@
   </div><!--end: .sidebar -->
   <div class="clear"></div>
 </div>
+<script>
+  $(function(){
+    $('.trash-btn').on('click',function(e){
+      e.preventDefault();
+      var conf = window.confirm('Are you sure you want to delete this project?');
+      if (conf){
+        alert('Project Deleted');
+        $(this).closest('form').submit();
+      }
+    })
+  })
+</script>
 <?php
 	endwhile;
 	get_footer();

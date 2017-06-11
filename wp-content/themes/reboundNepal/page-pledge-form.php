@@ -45,7 +45,7 @@ get_header();
 	                          <p class="rs"><span class="fw-b">Estimated delivery:</span> <?php echo date('M Y',get_sub_field('estimated_delivery')); ?></p>
 	                          <p class="rs fw-thin fc-gray pb20">Ships within <?php the_sub_field('ships_to'); ?></p>
 	                          <p class="rs ta-c form">
-	                          	$ <input class="txt" type="number" value="10">
+	                          	$ <input class="txt" type="number" value="<?php the_sub_field('pledge_amount'); ?>" min="<?php the_sub_field('pledge_amount'); ?>">
 	                          	<a class="btn big btn-red btn-back-project" href="#">Back this project</a>
 	                          </p>
 	                          <p class="rs ta-c donate-options" style="display: none">
