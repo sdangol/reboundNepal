@@ -23,7 +23,3 @@ get_header();
 <?php
 	endwhile;
 	get_footer();
-elseif:
-	wp_redirect(site_url());
-	die;
-endif;

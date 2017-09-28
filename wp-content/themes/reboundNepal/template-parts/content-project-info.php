@@ -10,7 +10,7 @@
 			<div class="sep"></div>
 			<div class="fee-item">
 					<p class="rs lbl">Pledged</p>
-					<span class="val">$<?php echo get_project_funded_amount(get_the_ID()) ?></span>
+					<span class="val"><?php echo get_selected_currency_sign(get_the_ID()); ?> <?php echo get_project_funded_amount(get_the_ID()) ?></span>
 			</div>
 			<div class="sep"></div>
 			<div class="fee-item">

@@ -10,6 +10,7 @@
 function reboundnepal_scripts() {
 	// Add custom fonts, and other css.
 	wp_enqueue_style( 'reboundnepal-fonts', "http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300", array(), null );
+	wp_enqueue_style( 'font-awesome', get_theme_file_uri( '/css/font-awesome.min.css' ) );
 	wp_enqueue_style( 'normalize-css', get_theme_file_uri( '/css/normalize.css' ) );
 	wp_enqueue_style( 'jquery-slider-css', get_theme_file_uri( '/css/jquery.sidr.light.css' ) );
 	wp_enqueue_style( 'animate-css', get_theme_file_uri( '/css/animate.min.css' ) );
@@ -75,7 +76,7 @@ function reboundnepal_register_post_types(){
 																								 'edit_item' => 'Edit Slider',
 																								 'view_item' => 'View Slider',
 																								 'not_found' => 'No Slider Found'],
-																		'public' => true,
+																		'show_ui' => true,
 																		'supports' => ['title','editor','thumbnail','custom-fields'],
 																		'menu_icon' => 'dashicons-slides']);
 	//Register Project
@@ -90,7 +91,7 @@ function reboundnepal_register_post_types(){
 																'supports' => ['title','editor','thumbnail','custom-fields','comments','author'],
 																'menu_icon' => 'dashicons-media-spreadsheet',
 																'taxonomies' => ['project-category']]);
-	//Register Project
+	//Register Team
 	register_post_type('our-team',['labels' => ['name' => 'Our Team',
 																						 'singular_name' => 'Team',
 																						 'add_new' => 'Add Member',
@@ -98,9 +99,33 @@ function reboundnepal_register_post_types(){
 																						 'edit_item' => 'Edit Member',
 																						 'view_item' => 'View Member',
 																						 'not_found' => 'No Members Found'],
-																'public' => true,
+																'show_ui' => true,
 																'supports' => ['title','editor','thumbnail','custom-fields'],
 																'menu_icon' => 'dashicons-groups']);
+
+	//Register Partners
+	register_post_type('our-partners',['labels' => ['name' => 'Our Partners',
+																						 'singular_name' => 'Partner',
+																						 'add_new' => 'Add Partner',
+																						 'add_new_item' => 'Add New Partner',
+																						 'edit_item' => 'Edit Partner',
+																						 'view_item' => 'View Partner',
+																						 'not_found' => 'No Partners Found'],
+																'show_ui' => true,
+																'supports' => ['title','thumbnail','custom-fields'],
+																'menu_icon' => 'dashicons-groups']);
+
+	//Register Testimonials
+	register_post_type('testimonials',['labels' => ['name' => 'Testimonials',
+																						 'singular_name' => 'Testimonial',
+																						 'add_new' => 'Add Testimonial',
+																						 'add_new_item' => 'Add New Testimonial',
+																						 'edit_item' => 'Edit Testimonial',
+																						 'view_item' => 'View Testimonial',
+																						 'not_found' => 'No Testimonial Found'],
+																'show_ui' => true,
+																'supports' => ['title','editor','thumbnail','custom-fields'],
+																'menu_icon' => 'dashicons-testimonial']);
 
 }
 add_action('init','reboundnepal_register_post_types');
@@ -168,8 +193,12 @@ function get_project_completed_percentage($project_id){
 	$project = get_post($project_id);
 	global $wpdb;
 	$funded_amount = get_project_funded_amount($project_id);
-	$target_amount = get_post_meta($project_id,'stretch_target',true);
-	$percentage = $funded_amount/$target_amount*100;
+	$target_amount = get_selected_currency_amount($project_id,'stretch_target',false);
+	if ($target_amount){
+		$percentage = $funded_amount/$target_amount*100;
+	}else{
+		$percentage = 0;
+	}
 	return round($percentage);
 }
 
@@ -480,6 +509,10 @@ if (!function_exists('retrieve_password')){
 	}
 }
 
+
+/**
+ * Delete the project
+ */
 function deleteProject(){
 	if (is_admin() || get_current_user_id() == get_post_field('post_author',$_POST['project_id'])){
 		wp_trash_post($_POST['project_id']);
@@ -489,9 +522,78 @@ function deleteProject(){
 }
 add_action('admin_post_deleteProject','deleteProject');
 
-function verify_donor_status($response){
+/**
+ * Add paypal donor info to db
+ */
+function save_paypal_donor($response){
+	if (isset($response['custom'])){
+		parse_str($response['custom'],$custom);
+		global $wpdb;
+		if ($custom['user_type'] == 'visitor'){
+			$wpdb->update('rbnd_backers_visitors',['pledged_amount' => $response['payment_gross'], 'completed_status' => 1],['ID' => $custom['uid']]);
+		}elseif ($custom['user_type'] == 'registered'){
+			$wpdb->insert('rbnd_backers_registered',['project_id' => $custom['project_id'], 'backer_id' => $custom['uid'], 'pledged_amount' => $response['payment_gross'], 'completed_status' => 1]);
+		}
+	}
 }
-add_action('paypal_ipn_for_wordpress_ipn_response_handler','verify_donor_status');
+add_action('paypal_ipn_for_wordpress_payment_status_completed','save_paypal_donor',10,1);
+
+/**
+ * Add khalti donor info to db
+ */
+function save_khalti_donor($response){
+	if (isset($response['custom'])){
+		parse_str($response['custom'],$custom);
+		global $wpdb;
+		if ($custom['user_type'] == 'visitor'){
+			$wpdb->update('rbnd_backers_visitors',['pledged_amount' => $response['amount'],'completed_status' => 1],['ID' => $custom['uid']]);
+		}elseif ($custom['user_type'] == 'registered'){
+			$wpdb->insert('rbnd_backers_registered',['project_id' => $custom['project_id'], 'backer_id' => $custom['uid'], 'pledged_amount' => $response['amount'],'completed_status' => 1]);
+		}
+	}
+}
+add_action('wp_khalti_success','save_khalti_donor',10,1);
+
+/**
+ * Return the amount according to the currency selected
+ * @param  int  	 $post_id  		Post ID
+ * @param  string  $field   		ACF Field Name
+ * @param  boolean $prefix  		True if $ or Rs is to be prepended, otherwise false
+ * @param  boolean $sub_field  	True if field to be obtained is inside repeater field, otherwise false
+ */
+function get_selected_currency_amount($post_id, $field, $prefix = true, $sub_field = false){
+	//Check if parent or child field is queried
+	if ($sub_field){
+		$function = 'get_sub_field';
+	}else{
+		$function = 'get_field';
+	}
+	//Check type of cuurency selected
+	if (get_field('currency',$post_id) == 'rupees'){
+		$amt = $function($field.'_rs',$post_id);
+		$sign = get_selected_currency_sign($post_id);
+	}elseif (get_field('currency',$post_id) == 'dollars'){
+		$amt = $function($field.'_dlr',$post_id);
+		$sign = get_selected_currency_sign($post_id); 
+	}
+	//Append prefix
+	if ($prefix) {
+		return $sign.$amt;
+	}else{
+		return $amt;
+	}
+}
+
+/**
+ * Get selected currency sign
+ */
+function get_selected_currency_sign($post_id){
+	if (get_field('currency',$post_id) == 'rupees'){
+		return 'Rs. ';
+	}elseif(get_field('currency',$post_id) == 'dollars'){
+		return '$ ';
+	}
+}
 
 //Include file for ajax form handling
 include_once __DIR__."/includes/ajax-functions.php";

@@ -1,0 +1,8 @@
+/*CSS for Khalti Admin View*/
+
+input[type=text]{
+	border: 1px solid rgba(34,36,38,.15);
+  color: rgba(0,0,0,.87);
+  border-radius: .28571429rem;
+	width: 50%;
+}

@@ -83,6 +83,16 @@
     	$('#forgot-password').hide();
     	$('#login-form').show();
     });
+
+    $('.donation-amount-field').on('change',function(){
+    	var input = $(this);
+    	var parent = input.closest('.donate-options');
+    	//For paypal
+    	parent.find('.donation-amount-value').val(input.val());
+    	//For khalti
+    	parent.find('.wpkhalti-payment-btn').data('amount',input.val()*100);
+    });
+
   });
  // The rest of the code goes here!
 }(window.jQuery, window, document));

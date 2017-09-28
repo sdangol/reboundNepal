@@ -76,6 +76,7 @@
 							$staff_picked->the_post();
 							get_template_part('template-parts/content','author-project');
 						}
+						wp_reset_postdata();
 					}
 			?>
 			</div><!--end: .marked-category -->
@@ -104,8 +105,8 @@
 						$popular->the_post();
 						get_template_part('template-parts/content','project');
 					endwhile;
+					wp_reset_postdata();
 				endif;
-				wp_reset_postdata();
 				?>
 				<!-- <div class="clear clear-2col"></div> -->
 			</div>
@@ -144,6 +145,57 @@
 		</div>
 	</div><!--end: .home-discover-friends -->
 
+	<!-- Partners Section -->
+	<div class="our-partners additional-info-line">
+		<div class="container_12">
+			<h2 class="common-title ta-c">Our Partners</h2>
+			<div class="partner-group">
+				<?php
+					$partners = new WP_Query(['post_type' => 'our-partners']);
+					while($partners->have_posts()):
+						$partners->the_post();
+				?>
+				<div class="partner-item grid_2">
+					<?php the_post_thumbnail(); ?>
+				</div>
+				<?php endwhile; wp_reset_postdata(); ?>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div><!--end: partners section -->
+
+		<!-- Testimonials -->
+	<div class="our-partners additional-info-line">
+		<div class="container_12">
+			<h2 class="common-title ta-c">Testimonials</h2>
+			<div class="testimonial-group">
+				<?php
+					$testimonials = new WP_Query(['post_type' => 'testimonials']);
+					while($testimonials->have_posts()):
+						$testimonials->the_post();
+				?>
+				<div class="testimonial-item grid_4">
+					<figure class="testimonial-item-image">
+						<?php the_post_thumbnail(); ?>
+					</figure>
+					<div class="testimonial-item-description ta-c">
+						<h3 class="testimonial-item-name"><?php the_title(); ?></h3>
+						<p class="testimonial-item-tagline"><?php the_field('title'); ?></p>
+						<p class="testimonial-item-text"><?php the_content(); ?></p>
+						<div class="testimonial-item-social">
+							<?php if (!empty(get_field('facebook'))): ?><a href="<?php the_field('facebook') ?>"><i class="fa fa-facebook fa-2x"></i></a><?php endif; ?>
+							<?php if (!empty(get_field('twitter'))): ?><a href="<?php the_field('twitter') ?>"><i class="fa fa-twitter fa-2x"></i></a><?php endif; ?>
+							<?php if (!empty(get_field('google_plus'))): ?><a href="<?php the_field('google_plus') ?>"><i class="fa fa-google fa-2x"></i></a><?php endif; ?>
+						</div>
+					</div>
+				</div>
+				<?php endwhile; wp_reset_postdata(); ?>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div><!--end: Testimonials -->
+
+	<!-- Where project come from -->
 	<div class="additional-info-line">
 		<div class="container_12">
 			<div class="grid_9">
@@ -155,5 +207,6 @@
 			</div>
 			<div class="clear"></div>
 		</div>
-	</div><!--end: .additional-info-line -->
+	</div><!--end: Where project come from -->
+
 <?php get_footer(); ?>
