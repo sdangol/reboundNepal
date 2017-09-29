@@ -108,8 +108,9 @@ function facebook_messenger_setting_head(){
     <?php
 }
 function facebook_messenger_chek_page(){
-     global $wp_query;
+    global $wp_query;
     $show = false;
+    if (!isset($wp_query->post)) return true;
     $post_id = $wp_query->post->ID;
     $type = get_option("facebook_messenger_hide_display");
     if( $type == "1" ) {

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 	<html>
-	<!-- Mirrored from envato.megadrupal.com/html/kickstars/how-it-work.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Feb 2017 13:39:46 GMT -->
 		<head>
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no" />
@@ -13,7 +12,7 @@
 			<!--[if lt IE 9]>
 			<script type="text/javascript" src="js/html5.js"></script>
 			<![endif]-->
-			<script>
+			<!-- <script>
 			!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 			n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
 			n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
@@ -24,7 +23,7 @@
 			fbq('track', "PageView");</script>
 			<noscript><img height="1" width="1" style="display:none"
 			src="https://www.facebook.com/tr?id=1031554816897182&amp;ev=PageView&amp;noscript=1"
-			/></noscript>
+			/></noscript> -->
 			<?php wp_head(); ?>
 		</head>
 		<body <?php body_class(); ?>>
