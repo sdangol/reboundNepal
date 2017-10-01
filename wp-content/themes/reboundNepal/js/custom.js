@@ -1,13 +1,42 @@
 // IIFE - Immediately Invoked Function Expression
+//Flag to denote searching action
+var isSearching = false;
 (function($, window, document) {
   // The $ is now locally scoped
  // Listen for the jQuery ready event on the document
   $(function() {
     // The DOM is ready!
-    // Show dropdown on search
-		$('#sys_txt_keyword').focusin(function(event) {
+    
+    // Get posts while writing up search keywork
+		$('#sys_txt_keyword').keyup(function(event) {
 			$('#search').show();
+			//Search only when current search timeout has passed
+			if (!window.isSearching){
+				window.isSearching = true;
+				$('.list-project-result .result-container').hide();
+				$('.list-project-result .loader').show();
+				var input = $(this);
+				setTimeout(function(){
+					$.ajax({
+						url: admin_ajax_url,
+						type: 'GET',
+						data: {
+							key:input.val(),
+							action:'searchProjects'
+						},
+					}).done(function(res) {
+						var output = $.parseHTML(res);
+						$('.list-project-result .loader').hide();
+						$('.list-project-result .result-container').html(output).show();
+						window.isSearching = false;
+					}).fail(function() {
+						console.log("error");
+					});
+				},2000);
+			}
 		});
+
+		//Hide search box on cross
 		$('.iBigX').click(function() {
 			$(this).closest('.dropdown-search-result').hide();
 		});
@@ -15,6 +44,11 @@
 		//Show dropdown on discover
 		$('#discover-projects').on('click',function(){
 			$('#discover').show();
+		});
+
+		$('.view-all').on('click',function(e){
+			e.preventDefault();
+			$('#rebound-search-form').submit();
 		});
 
 		//Handle ajax form submit
@@ -30,13 +64,7 @@
 				data: $(this).serialize(),
 			})
 			.done(function(res) {
-				// var isJSON = true;
-				// try{
 					response = $.parseJSON(res);
-				// }catch(err){
-				// 	isJSON = false;
-				// }
-				// if (isJSON) {
 					if (response.type == 'success-redirect'){
 						//Reload the page if success
 						window.location.href = response.url;
@@ -44,11 +72,6 @@
 						//Show error 
 						$(this).find('.alert-msg').addClass(response.type).text(response.text).show();
 					}
-				// }
-				// else{
-				// 	response = $.parseHTML(res);
-				// 	debugger;
-				// }
 			})
 			.fail(function() {
 				console.log("error");

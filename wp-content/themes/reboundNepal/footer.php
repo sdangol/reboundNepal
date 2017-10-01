@@ -206,7 +206,7 @@
 	</div>
 </div>
 <script>
-	var admin_ajax_url = "<?php echo admin_url('admin_ajax.php'); ?>";
+	var admin_ajax_url = "<?php echo admin_url('admin-ajax.php'); ?>";
 	var $get_vars = <?php echo json_encode($_GET); ?>;
 </script>
 <?php wp_footer(); ?>

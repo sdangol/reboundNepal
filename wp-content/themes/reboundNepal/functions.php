@@ -340,16 +340,20 @@ function alter_query( $query ) {
         return;
 
     if ( is_tax() ) {
-        // Display only 1 post for the original blog archive
         $query->set( 'posts_per_page', 6 );
         return;
     }
 
     if ( is_author() ) {
-        // Display 50 posts for a custom post type called 'movie'
         $query->set( 'post_type', 'project' );
         $query->set( 'posts_per_page', 2 );
         return;
+    }
+
+    if (is_search()){
+    	$query->set( 'post_type', 'project' );
+      $query->set( 'posts_per_page', 9 );
+      return;
     }
 }
 add_action( 'pre_get_posts', 'alter_query', 1 );

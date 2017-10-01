@@ -255,3 +255,24 @@ function reset_user_password(){
 	die;
 }
 add_action('wp_ajax_nopriv_reset_password','reset_user_password');
+
+
+function search_projects(){
+	$search = new WP_Query(['post_type' => 'project',
+													's' => $_GET['key'],
+													'posts_per_page' => 4 ]);
+	ob_start();
+	if ($search->have_posts()):
+		while($search->have_posts()):
+			$search->the_post();
+			get_template_part('template-parts/content','project');
+		endwhile;
+	else:
+		echo "<h2 class='fc-white text-center'>No Project Found</h2>";
+	endif;
+	$results = ob_get_clean();
+	echo $results;
+	wp_die();
+}
+add_action('wp_ajax_searchProjects','search_projects');
+add_action('wp_ajax_nopriv_searchProjects','search_projects');
