@@ -57,11 +57,14 @@ var isSearching = false;
 			//Get action attribute of form
 			var ajaxurl = $(this).attr('action');
 			var form = $(this);
+			var formData = new FormData(form[0]);
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
 				context:this,
-				data: $(this).serialize(),
+				data: formData,
+				contentType: false, 
+    		processData: false,
 			})
 			.done(function(res) {
 					response = $.parseJSON(res);

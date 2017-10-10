@@ -148,8 +148,10 @@ function edit_user_profile(){
 	if (!is_email( $_POST['email'])){
 		$error->add('invalid_email','Please enter a valid email');
 	}
-	if ($existing = email_exists( $_POST['email']) && $existing != get_current_user_id()){
-		$error->add('invalid_email','Email is already registered in the system');
+
+	if ($existing = email_exists( $_POST['email'])){
+		if ($existing != get_current_user_id())
+			$error->add('invalid_email','Email is already registered in the system');
 	}
 	//Show warning message if error
 	if (!empty($error->get_error_message())){
@@ -171,6 +173,16 @@ function edit_user_profile(){
 									'description' => $description])){
 		update_user_meta(get_current_user_id(),'address',$address);
 		update_user_meta(get_current_user_id(),'phone',$phone);
+		if (isset($_FILES) && $_FILES['user_image']['error'] == 0){
+			if ( ! function_exists( 'wp_handle_upload' ) ) {
+			  require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			}
+			$uploadedfile = $_FILES['user_image'];
+			$upload_overrides = array( 'test_form' => false );
+			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+			if ( $movefile && ! isset( $movefile['error'] ) )
+				update_user_meta(get_current_user_id(),'user_image',$movefile['url']);
+		}
 		echo json_encode(['type' => 'alert-success','text' => 'User profile updated']);
 		die;
 	}

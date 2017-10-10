@@ -31,8 +31,7 @@
 					<div class="project-tab-detail tabbable accordion">
 							<ul class="nav nav-tabs clearfix">
 								<li class="active"><a href="#">About</a></li>
-								<li><a href="#" class="be-fc-orange">Updates (0)</a></li>
-								<li><a href="#" class="be-fc-orange">Backers (270)</a></li>
+								<li><a href="#" class="be-fc-orange">Backers (<?php echo get_project_backers(get_the_ID()); ?>)</a></li>
 								<li><a href="#" class="be-fc-orange">Comments (<?php echo get_comments_number(); ?>)</a></li>
 							</ul>
 							<div class="tab-content">
@@ -51,102 +50,30 @@
 											</div><!--end: .tab-pane(About) -->
 									</div>
 									<div>
-											<h3 class="rs alternate-tab accordion-label">Updates (0)</h3>
+										<?php
+											$backers = get_project_backers(get_the_ID(),'all');
+										?>
+											<h3 class="rs alternate-tab accordion-label">Backers (<?php echo count($backers); ?>)</h3>
 											<div class="tab-pane accordion-content">
 													<div class="tab-pane-inside">
-															<div class="list-last-post">
-																	<div class="media other-post-item">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/binamra.jpg" alt="$TITLE">
-																			</a>
-																			<div class="media-body">
-																					<h4 class="rs title-other-post">
-																							<a href="#" class="be-fc-orange fw-b">Bnamra Dhakal</a>
-																					</h4>
-																					<p class="rs fc-gray time-post pb10">posted 5 days ago</p>
-																					<p class="rs description">Some update about the activities of the project. Curious minds post comments here to know the details of the work.</p>
-																			</div>
-																	</div><!--end: .other-post-item -->
-																	<div class="media other-post-item">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/img2.jpg" alt="$TITLE">
-																			</a>
-																			<div class="media-body">
-																					<h4 class="rs title-other-post">
-																							<a href="#" class="be-fc-orange fw-b">Ram Kmar</a>
-																					</h4>
-																					<p class="rs fc-gray time-post pb10">posted 5 days ago</p>
-																					<p class="rs description">Nam nec sem ac risus congue varius. Maecenas interdum ipsum tempor ipsum fringilla eu vehicula urna vehicula.</p>
-																			</div>
-																	</div><!--end: .other-post-item -->
-																	<div class="media other-post-item">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/img5.jpg" alt="$TITLE">
-																			</a>
-																			<div class="media-body">
-																					<h4 class="rs title-other-post">
-																							<a href="#" class="be-fc-orange fw-b">Sheetal Prasain</a>
-																					</h4>
-																					<p class="rs fc-gray time-post pb10">posted 5 days ago</p>
-																					<p class="rs description">Nam nec sem ac risus congue varius. Maecenas interdum ipsum tempor ipsum fringilla eu vehicula urna vehicula.</p>
-																			</div>
-																	</div><!--end: .other-post-item -->
-																	<div class="media other-post-item">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/img8.jpg" alt="$TITLE">
-																			</a>
-																			<div class="media-body">
-																					<h4 class="rs title-other-post">
-																							<a href="#" class="be-fc-orange fw-b">Basanta Khadka</a>
-																					</h4>
-																					<p class="rs fc-gray time-post pb10">posted 5 days ago</p>
-																					<p class="rs description">Nam nec sem ac risus congue varius. Maecenas interdum ipsum tempor ipsum fringilla eu vehicula urna vehicula.</p>
-																			</div>
-																	</div><!--end: .other-post-item -->
-																	<div class="media other-post-item">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/img6.jpg" alt="$TITLE">
-																			</a>
-																			<div class="media-body">
-																					<h4 class="rs title-other-post">
-																							<a href="#" class="be-fc-orange fw-b">Sarmila Malla</a>
-																					</h4>
-																					<p class="rs fc-gray time-post pb10">posted 5 days ago</p>
-																					<p class="rs description">Nam nec sem ac risus congue varius. Maecenas interdum ipsum tempor ipsum fringilla eu vehicula urna vehicula.</p>
-																			</div>
-																	</div><!--end: .other-post-item -->
-															</div>
-													</div>
-											</div><!--end: .tab-pane(Updates) -->
-									</div>
-									<div>
-											<h3 class="rs alternate-tab accordion-label">Backers (270)</h3>
-											<div class="tab-pane accordion-content">
-													<div class="tab-pane-inside">
+														<?php foreach ($backers as $backer): ?>
 															<div class="project-author pb20">
 																	<div class="media">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/binamra.jpg" alt="$USER_NAME"/>
-																			</a>
+																		<a href="#" class="thumb-left">
+																			<?php if ($backer['user_type'] == 'visitor'): ?>
+																				<img src="<?php echo get_template_directory_uri().'/images/no-avatar.png'; ?>"/>
+																			<?php else: ?>
+																					<?php echo get_avatar($backer['email']); ?>
+																			<?php endif; ?>
+																		</a>
 																			<div class="media-body">
-																					<h4 class="rs pb10"><a href="#" class="be-fc-orange fw-b">Binamra Dhakal</a></h4>
-																					<p class="rs">Bhaktapur, Nepal</p>
-																					<p class="rs fc-gray">5 projects</p>
+																					<h4 class="rs pb10"><a href="#" class="be-fc-orange fw-b"><?php echo $backer['full_name']; ?></a></h4>
+																					<p class="rs"><?php echo $backer['address'] ?></p>
+																					<p class="rs fc-gray">Pledged <?php echo $backer['pledged_amount'] ?></p>
 																			</div>
 																	</div>
 															</div><!--end: .project-author -->
-															<div class="project-author pb20">
-																	<div class="media">
-																			<a href="#" class="thumb-left">
-																					<img src="images/ex/img2.jpg" alt="$USER_NAME"/>
-																			</a>
-																			<div class="media-body">
-																					<h4 class="rs pb10"><a href="#" class="be-fc-orange fw-b">Hari Sharan</a></h4>
-																					<p class="rs">Kathmandu, Nepal</p>
-																					<p class="rs fc-gray">5 projects</p>
-																			</div>
-																	</div>
-															</div><!--end: .project-author -->
+														<?php endforeach; ?>
 													</div>
 													<div class="project-btn-action">
 															<a class="btn btn-red" href="#">Ask a question</a>

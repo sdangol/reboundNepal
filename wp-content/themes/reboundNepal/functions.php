@@ -24,8 +24,8 @@ function reboundnepal_scripts() {
 
 	//Add js files
 	wp_enqueue_script( 'raphael-js', get_theme_file_uri( '/js/raphael-min.js' ), array(), '1.0', true );
-	wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-1.9.1.min.js' ));
-	wp_enqueue_script( 'jQuery-migrate', get_theme_file_uri( '/js/jquery-migrate-1.2.1.min.js' ), array(), '1.2.1', true );
+	wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-3.2.1.min.js' ));
+	// wp_enqueue_script( 'jQuery-migrate', get_theme_file_uri( '/js/jquery-migrate-1.2.1.min.js' ), array(), '1.2.1', true );
 	wp_enqueue_script( 'touchwipe-js', get_theme_file_uri( '/js/jquery.touchwipe.min.js' ), array(), '1.0', true );
 	wp_enqueue_script( 'md-slider-js', get_theme_file_uri( '/js/md_slider.min.js' ), array(), '1.0', true );
 	wp_enqueue_script( 'jQuery-sidr', get_theme_file_uri( '/js/jquery.sidr.min.js' ), array(), '1.0', true );
@@ -206,10 +206,16 @@ function get_project_completed_percentage($project_id){
  * Get the total backers of a project
  * @param  int 		$project_id Project ID
  */
-function get_project_backers($project_id){
+function get_project_backers($project_id,$field='count'){
 	global $wpdb;
-	$backers = $wpdb->get_var($wpdb->prepare('SELECT SUM(total) FROM ((SELECT COUNT(*) as total FROM rbnd_backers_registered WHERE project_id = %d AND pledged_amount IS NOT NULL) UNION ALL (SELECT COUNT(*) as total FROM rbnd_backers_visitors WHERE project_id = %d AND pledged_amount IS NOT NULL)) t1',$project_id,$project_id));
-	return $backers;
+	$visitor_sql = "SELECT full_name,email,address,contact,pledged_amount,backed_date,'visitor' as user_type FROM {$wpdb->prefix}backers_visitors WHERE completed_status = 1";
+  $registered_sql = "SELECT display_name as full_name,user_email as email,m1.meta_value as address,m2.meta_value as contact,pledged_amount,backed_date,'registered' as user_type FROM {$wpdb->prefix}backers_registered t1 JOIN {$wpdb->users} u1 ON u1.ID = t1.backer_id LEFT JOIN {$wpdb->usermeta} m1 ON (m1.user_id = t1.backer_id AND m1.meta_key = 'address' ) LEFT JOIN {$wpdb->usermeta} m2 ON (m2.user_id = t1.backer_id AND m2.meta_key = 'contact' )  WHERE completed_status = 1";
+	$visitor_sql .= " AND project_id = ".$project_id;
+	$registered_sql .= " AND project_id = ".$project_id;
+  $sql = $visitor_sql." UNION ".$registered_sql;
+  $result = $wpdb->get_results( $sql, 'ARRAY_A' );
+	if ($field == 'count') return count($result);
+	else return $result;
 }
 
 /**
@@ -598,6 +604,29 @@ function get_selected_currency_sign($post_id){
 		return '$ ';
 	}
 }
+
+// Custom avatar
+function rbdn_custom_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+    $user = false;
+    if ( is_numeric( $id_or_email ) ) {
+        $id = (int) $id_or_email;
+        $user = get_user_by( 'id' , $id );
+    } elseif ( is_object( $id_or_email ) ) {
+        if ( ! empty( $id_or_email->user_id ) ) {
+            $id = (int) $id_or_email->user_id;
+            $user = get_user_by( 'id' , $id );
+        }
+    } else {
+        $user = get_user_by( 'email', $id_or_email );	
+    }
+    if ( $user && is_object( $user ) ) {
+      $avatar = get_user_meta( $user->data->ID, 'user_image',true );
+      $avatar = "<img alt='{$alt}' src='{$avatar}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+    }
+
+    return $avatar;
+}
+add_filter( 'get_avatar' , 'rbdn_custom_avatar' , 1 , 5 );
 
 //Include file for ajax form handling
 include_once __DIR__."/includes/ajax-functions.php";

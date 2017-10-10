@@ -41,26 +41,26 @@
 										<h3 class="rs alternate-tab accordion-label">Profile</h3>
 										<div class="tab-pane accordion-content">
 												<div class="form form-profile">
-														<form action="<?php echo admin_url('admin-ajax.php?action=editprofile') ?>" class="ajax-form">
+														<form action="<?php echo admin_url('admin-ajax.php?action=editprofile') ?>" class="ajax-form" enctype="multipart/form-data">
 																<div class="alert-msg">
 																	
 																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_name1">First Name*:</label>
+																		<label class="lbl" for="txt_first">First Name*:</label>
 																		<div class="val">
-																				<input class="txt" type="text" id="txt_name1" value="<?php echo get_user_meta($curauth->ID,'first_name',true); ?>" name="first_name">
+																				<input class="txt" type="text" id="txt_first" value="<?php echo get_user_meta($curauth->ID,'first_name',true); ?>" name="first_name">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_name1">Last Name*:</label>
+																		<label class="lbl" for="txt_last">Last Name*:</label>
 																		<div class="val">
-																				<input class="txt" type="text" id="txt_name1" value="<?php echo get_user_meta($curauth->ID,'last_name',true); ?>" name="last_name">
+																				<input class="txt" type="text" id="txt_last" value="<?php echo get_user_meta($curauth->ID,'last_name',true); ?>" name="last_name">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
-																		<label class="lbl" for="txt_name1">Email*:</label>
+																		<label class="lbl" for="txt_email">Email*:</label>
 																		<div class="val">
-																				<input class="txt" type="email" id="txt_name1" value="<?php echo $curauth->user_email; ?>" name="email">
+																				<input class="txt" type="email" id="txt_email" value="<?php echo $curauth->user_email; ?>" name="email">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
@@ -73,6 +73,12 @@
 																		<label class="lbl" for="txt_time_zone">Contact*:</label>
 																		<div class="val">
 																				<input class="txt" type="text" id="txt_time_zone" value="<?php echo get_user_meta($curauth->ID,'phone',true); ?>" name="phone">
+																		</div>
+																</div>
+																<div class="row-item clearfix">
+																		<label class="lbl" for="user_image">Upload Profile Picture:</label>
+																		<div class="val">
+																			<input class="" type="file" id="user_image" name="user_image">
 																		</div>
 																</div>
 																<div class="row-item clearfix">
