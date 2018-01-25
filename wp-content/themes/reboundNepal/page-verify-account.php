@@ -33,7 +33,6 @@ get_header();
 							<span class="lbl">Start project</span>
 							<span class="desc">Its free</span>
 						</a>
-						<p class="rs ta-c description-btn">Morbi hendrerit malesuada nulla</p>
 					</div>
 					<div class="right-intro"><?php the_post_thumbnail('full'); ?></div>
 					<div class="clear"></div>

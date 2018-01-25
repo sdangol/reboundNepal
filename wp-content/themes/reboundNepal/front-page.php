@@ -121,24 +121,24 @@
 					$team_array = $team->posts;
 					for ($i = 0;$i < 8 ; $i ++):
 				?>
-				<a class="thumb-avatar" href="<?php echo get_permalink($team_array[$i]); ?>"><?php echo get_the_post_thumbnail($team_array[$i],'full'); ?></a>
+				<a class="thumb-avatar" href="#"><?php echo get_the_post_thumbnail($team_array[$i],'full'); ?></a>
 				<?php
 					endfor;
 				?>
 				<div class="clear"></div>
 			</div>
 			<div class="row-friends row-connect-fb">
-				<a class="thumb-avatar t-first" href="<?php echo get_permalink($team_array[8]); ?>"><?php echo get_the_post_thumbnail($team_array[8],'full'); ?></a>
+				<a class="thumb-avatar t-first" href="#"><?php echo get_the_post_thumbnail($team_array[8],'full'); ?></a>
 				<div class="connect-fb">
 					<p class="rs description">Discover great projects with your friends!</p>
-					<a href="#" class="btn btn-fb">Meet Our Team</a>
+					<a href="<?php echo site_url('/our-team/') ?>" class="btn btn-fb">Meet Our Team</a>
 				</div>
-				<a class="thumb-avatar t-last" href="<?php echo get_permalink($team_array[9]); ?>"><?php echo get_the_post_thumbnail($team_array[0],'full'); ?></a>
+				<a class="thumb-avatar t-last" href="#"><?php echo get_the_post_thumbnail($team_array[0],'full'); ?></a>
 				<div class="clear"></div>
 			</div>
 			<div class="row-friends">
 			<?php for ($i=1; $i < 9 ; $i++) : ?>
-				<a class="thumb-avatar" href="<?php echo get_permalink($team_array[$i]); ?>"><?php echo get_the_post_thumbnail($team_array[$i],'full'); ?></a>
+				<a class="thumb-avatar" href="#"><?php echo get_the_post_thumbnail($team_array[$i],'full'); ?></a>
 			<?php endfor; ?>
 				<div class="clear"></div>
 			</div>
@@ -203,7 +203,7 @@
 				<p class="rs description"><?php the_field('last_section_description'); ?></p>
 			</div>
 			<div class="grid_3 ta-r">
-				<a class="btn bigger btn-red" href="how-it-work.html">Learn more</a>
+				<a class="btn bigger btn-red" href="<?php echo site_url('/where-projects-come-from/') ?>">Learn more</a>
 			</div>
 			<div class="clear"></div>
 		</div>

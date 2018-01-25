@@ -43,7 +43,7 @@
 														<ul class="profile-wrapper">
 															<li class="dropdown">
 																<div class="profile">
-																	<?php echo get_avatar(get_the_author_meta('ID')); ?>
+																	<?php echo get_avatar($logged_user->ID); ?>
 																	<!-- user profile -->
 																	<a href="#" class="dropdown-toggle" data-target="#profile-menu">
 																		<?php echo $logged_user->display_name; ?>

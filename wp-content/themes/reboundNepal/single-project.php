@@ -43,10 +43,6 @@
 															<p class="rs post-by">by <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" class="fw-b fc-gray be-fc-orange"><?php the_author(); ?></a> in <span class="fw-b fc-gray"><?php the_field('location'); ?></span></p>
 															<?php the_content(); ?>
 													</div>
-													<div class="project-btn-action">
-															<a class="btn big btn-red" href="#">Ask a question</a>
-															<a class="btn big btn-black" href="#">Report this project</a>
-													</div>
 											</div><!--end: .tab-pane(About) -->
 									</div>
 									<div>
@@ -56,41 +52,47 @@
 											<h3 class="rs alternate-tab accordion-label">Backers (<?php echo count($backers); ?>)</h3>
 											<div class="tab-pane accordion-content">
 													<div class="tab-pane-inside">
-														<?php foreach ($backers as $backer): ?>
-															<div class="project-author pb20">
-																	<div class="media">
-																		<a href="#" class="thumb-left">
-																			<?php if ($backer['user_type'] == 'visitor'): ?>
-																				<img src="<?php echo get_template_directory_uri().'/images/no-avatar.png'; ?>"/>
-																			<?php else: ?>
-																					<?php echo get_avatar($backer['email']); ?>
-																			<?php endif; ?>
-																		</a>
-																			<div class="media-body">
-																					<h4 class="rs pb10"><a href="#" class="be-fc-orange fw-b"><?php echo $backer['full_name']; ?></a></h4>
-																					<p class="rs"><?php echo $backer['address'] ?></p>
-																					<p class="rs fc-gray">Pledged <?php echo $backer['pledged_amount'] ?></p>
-																			</div>
-																	</div>
-															</div><!--end: .project-author -->
-														<?php endforeach; ?>
+														<?php if (!empty($backers)): ?>
+															<?php foreach ($backers as $backer): ?>
+																<div class="project-author pb20">
+																		<div class="media">
+																			<a href="#" class="thumb-left">
+																				<?php if ($backer['user_type'] == 'visitor'): ?>
+																					<img src="<?php echo get_template_directory_uri().'/images/no-avatar.png'; ?>"/>
+																				<?php else: ?>
+																						<?php echo get_avatar($backer['email']); ?>
+																				<?php endif; ?>
+																			</a>
+																				<div class="media-body">
+																						<h4 class="rs pb10"><a href="#" class="be-fc-orange fw-b"><?php echo $backer['full_name']; ?></a></h4>
+																						<p class="rs"><?php echo $backer['address'] ?></p>
+																						<p class="rs fc-gray">Pledged <?php echo $backer['pledged_amount'] ?></p>
+																				</div>
+																		</div>
+																</div><!--end: .project-author -->
+															<?php endforeach; ?>
+														<?php else: ?>
+															<h4>No backers yet</h4>
+														<?php endif; ?>
 													</div>
 													<div class="project-btn-action">
-															<a class="btn btn-red" href="#">Ask a question</a>
-															<a class="btn btn-black" href="#">Report this project</a>
+															<a class="btn btn-red" href="mailto:<?php echo get_the_author_meta('user_email'); ?>">Ask a question</a>
+															<!-- <a class="btn btn-black" href="#">Report this project</a> -->
 													</div>
 											</div><!--end: .tab-pane(Backers) -->
 									</div>
 									<div>
-										<h3 class="rs active alternate-tab accordion-label">Comments (<?php comments_number(); ?>)</h3>
+										<h3 class="rs alternate-tab accordion-label">Comments (<?php comments_number(); ?>)</h3>
 										<?php
 										// If comments are open or we have at least one comment, load up the comment template.
 										if ( comments_open() || get_comments_number() ) :
 											comments_template();
-										endif;
+										else:
 										?>
+											<h4>No comments have been posted yet.</h4>
+										<?php endif; ?>
 									</div>
-								</div>
+							</div>
 					</div><!--end: .project-tab-detail -->
 			</div>
 	</div><!--end: .content -->

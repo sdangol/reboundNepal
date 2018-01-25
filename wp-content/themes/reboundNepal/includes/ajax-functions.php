@@ -183,7 +183,8 @@ function edit_user_profile(){
 			if ( $movefile && ! isset( $movefile['error'] ) )
 				update_user_meta(get_current_user_id(),'user_image',$movefile['url']);
 		}
-		echo json_encode(['type' => 'alert-success','text' => 'User profile updated']);
+		// echo json_encode(['type' => 'alert-success','text' => 'User profile updated']);
+		echo json_encode(['type' => 'success-redirect','url' => $_SERVER['HTTP_REFERER']]);
 		die;
 	}
 	else{

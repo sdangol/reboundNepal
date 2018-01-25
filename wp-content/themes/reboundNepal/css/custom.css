@@ -169,3 +169,29 @@ figure.testimonial-item-image {
 	display: inline-block;
 	width: 200px;
 }
+
+.team-member-container{
+	margin-bottom: 20px;
+}
+.team-member-container .team-member-portrait{
+	width: 25%;
+  margin-bottom: 0;
+  margin-right: 10px;
+  float: left;
+}
+.team-member-container .team-member-portrait img{
+	width: 100%;
+}
+.team-member-container .team-member-details{
+  width: 67%;
+  float: left;
+}
+div.wpcf7-validation-errors {
+	border:none;
+}
+.comment-respond{
+	padding: 20px;
+}
+.comment-respond textarea{
+	width: 100%;
+}

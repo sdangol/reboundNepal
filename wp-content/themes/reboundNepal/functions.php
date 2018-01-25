@@ -24,8 +24,9 @@ function reboundnepal_scripts() {
 
 	//Add js files
 	wp_enqueue_script( 'raphael-js', get_theme_file_uri( '/js/raphael-min.js' ), array(), '1.0', true );
-	wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-3.2.1.min.js' ));
-	// wp_enqueue_script( 'jQuery-migrate', get_theme_file_uri( '/js/jquery-migrate-1.2.1.min.js' ), array(), '1.2.1', true );
+	wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-1.9.1.min.js' ));
+	// wp_enqueue_script( 'jQuery', get_theme_file_uri( '/js/jquery-3.2.1.min.js' ));
+	wp_enqueue_script( 'jQuery-migrate', get_theme_file_uri( '/js/jquery-migrate-1.2.1.min.js' ), array(), '1.2.1', true );
 	wp_enqueue_script( 'touchwipe-js', get_theme_file_uri( '/js/jquery.touchwipe.min.js' ), array(), '1.0', true );
 	wp_enqueue_script( 'md-slider-js', get_theme_file_uri( '/js/md_slider.min.js' ), array(), '1.0', true );
 	wp_enqueue_script( 'jQuery-sidr', get_theme_file_uri( '/js/jquery.sidr.min.js' ), array(), '1.0', true );
@@ -131,7 +132,7 @@ function reboundnepal_register_post_types(){
 add_action('init','reboundnepal_register_post_types');
 
 //Remove wrapping p tag in content
-remove_filter('the_content','wpautop');
+// remove_filter('the_content','wpautop');
 
 /**
  * Register custom taxonomy
@@ -621,6 +622,7 @@ function rbdn_custom_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
     }
     if ( $user && is_object( $user ) ) {
       $avatar = get_user_meta( $user->data->ID, 'user_image',true );
+      if (!$avatar) $avatar = get_template_directory_uri().'/images/no-avatar.png';
       $avatar = "<img alt='{$alt}' src='{$avatar}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
     }
 

@@ -17,7 +17,10 @@
                         'callback' => 'reboundnepal_comments',
                         'avatar_size' => 100,
                         'end-callback' => 'reboundnepal_comments_end']);
+      comment_form(['class_submit' => 'btn btn-red']);
     ?>
+    <?php else: ?>
+      <h4>No comments have been posted yet.</h4>
     <?php endif; ?>
   </div>
 </div><!--end: .tab-pane(Comments) -->

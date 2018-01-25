@@ -55,11 +55,11 @@
 				<div class="grid_12">
 					<a class="logo-footer" href="<?php echo get_theme_file_uri('/images/logo.png'); ?>"><img width="100" src="<?php echo get_theme_file_uri('/images/logo.png'); ?>" alt="reboundNepal"/></a>
 					<p class="rs term-privacy">
-						<a class="fw-b be-fc-orange" href="single.html">Terms & Conditions</a>
+						<a class="fw-b be-fc-orange" href="<?php echo site_url('terms-and-conditions'); ?>">Terms & Conditions</a>
 						<span class="sep">/</span>
-						<a class="fw-b be-fc-orange" href="single.html">Privacy Policy</a>
+						<a class="fw-b be-fc-orange" href="<?php echo site_url('privacy-policy'); ?>">Privacy Policy</a>
 						<span class="sep">/</span>
-						<a class="fw-b be-fc-orange" href="#">FAQ</a>
+						<a class="fw-b be-fc-orange" href="<?php echo site_url('faq'); ?>">FAQ</a>
 					</p>
 					<p class="rs ta-c fc-gray-dark site-copyright">
 						Powered by <a href="http://sastracreations.com/" title="Sastra creations" target="_blank">Sastra Creations</a>.
