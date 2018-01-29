@@ -20,7 +20,8 @@ function register_user(){
 		$error->add('password_mismatch','Passwords donot match');
 	}
 	//Show warning message if error
-	if (!empty($error->get_error_message())){
+	$errmsg = $error->get_error_message();
+	if (!empty($errmsg)){
 		echo json_encode(['type' => 'alert-warning','text' => $error->get_error_message()]);
 		die;
 	}
